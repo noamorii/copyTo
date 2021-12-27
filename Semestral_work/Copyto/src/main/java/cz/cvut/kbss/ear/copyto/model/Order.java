@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@Table(name = "C_Order")
 @NamedQueries({
         @NamedQuery(name = "Order.findAllByCategory", query = "SELECT o from Order o WHERE :category MEMBER OF o.categories"),
         @NamedQuery(name = "Order.findAllByDeadline", query = "SELECT o from Order o WHERE :deadline > o.deadline"),

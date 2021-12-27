@@ -1,6 +1,8 @@
-package cz.cvut.kbss.ear.copyto.model;
+package cz.cvut.kbss.ear.copyto.model.users;
 
 import cz.cvut.kbss.ear.copyto.enums.Role;
+import cz.cvut.kbss.ear.copyto.model.AbstractEntity;
+import cz.cvut.kbss.ear.copyto.model.Conversation;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -8,12 +10,15 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@Table(name = "C_User")
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "USER_TYPE", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
         @NamedQuery(name = "User.findByRole", query = "SELECT u FROM User u WHERE :role = u.role"),
         @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE :email = u.email"),
         @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE :firstName = u.firstName and :surname = u.surname")
 })
-public class User extends AbstractEntity{
+public class User extends AbstractEntity {
 
     @ManyToMany
     private List<Conversation> conversations = new ArrayList<>();
@@ -45,5 +50,5 @@ public class User extends AbstractEntity{
 
     @Basic(optional = false)
     @Column(nullable = false)
-    private Role role = Role.USER;
+    protected Role role = Role.USER;
 }

@@ -4,7 +4,7 @@ import cz.cvut.kbss.ear.copyto.dao.ConversationDao;
 import cz.cvut.kbss.ear.copyto.dao.MessageDao;
 import cz.cvut.kbss.ear.copyto.model.Conversation;
 import cz.cvut.kbss.ear.copyto.model.Message;
-import cz.cvut.kbss.ear.copyto.model.User;
+import cz.cvut.kbss.ear.copyto.model.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

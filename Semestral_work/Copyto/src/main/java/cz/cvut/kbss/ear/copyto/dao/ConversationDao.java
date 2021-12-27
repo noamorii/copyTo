@@ -2,7 +2,7 @@ package cz.cvut.kbss.ear.copyto.dao;
 
 import cz.cvut.kbss.ear.copyto.model.Conversation;
 import cz.cvut.kbss.ear.copyto.model.Message;
-import cz.cvut.kbss.ear.copyto.model.User;
+import cz.cvut.kbss.ear.copyto.model.users.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

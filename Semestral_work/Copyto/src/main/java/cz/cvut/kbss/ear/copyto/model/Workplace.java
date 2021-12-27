@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "C_Workplace")
 @NamedQueries({
         @NamedQuery(name = "Workplace.findEditable", query = "SELECT w from Workplace w WHERE :editable = TRUE"),
         @NamedQuery(name = "Workplace.findAllVersions", query = "select w.versions from Workplace w")

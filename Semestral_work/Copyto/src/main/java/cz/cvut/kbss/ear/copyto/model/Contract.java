@@ -1,9 +1,12 @@
 package cz.cvut.kbss.ear.copyto.model;
 
+import cz.cvut.kbss.ear.copyto.model.users.User;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name = "C_Contract")
 @NamedQueries({
         @NamedQuery(name = "Contract.findAllByClient", query = "SELECT c FROM Contract c WHERE :client = c.client"),
         @NamedQuery(name = "Contract.findAllByCopywriter", query = "SELECT c FROM Contract c WHERE :copywriter = c.copywriter"),

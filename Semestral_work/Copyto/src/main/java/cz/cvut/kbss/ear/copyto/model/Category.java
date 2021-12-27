@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "C_Category")
 @NamedQueries({
         @NamedQuery(name = "Category.findByName", query = "SELECT c FROM Category c WHERE :name = c.name")
 })

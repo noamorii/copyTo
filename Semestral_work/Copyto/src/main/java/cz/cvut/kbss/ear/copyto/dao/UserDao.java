@@ -1,7 +1,7 @@
 package cz.cvut.kbss.ear.copyto.dao;
 
 import cz.cvut.kbss.ear.copyto.enums.Role;
-import cz.cvut.kbss.ear.copyto.model.User;
+import cz.cvut.kbss.ear.copyto.model.users.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

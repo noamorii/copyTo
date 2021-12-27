@@ -2,7 +2,7 @@ package cz.cvut.kbss.ear.copyto.dao;
 
 import cz.cvut.kbss.ear.copyto.model.Contract;
 import cz.cvut.kbss.ear.copyto.model.Order;
-import cz.cvut.kbss.ear.copyto.model.User;
+import cz.cvut.kbss.ear.copyto.model.users.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;

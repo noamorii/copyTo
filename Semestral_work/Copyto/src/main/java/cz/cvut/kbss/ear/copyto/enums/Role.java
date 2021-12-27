@@ -5,7 +5,7 @@ public enum Role {
     USER("ROLE_USER"), //TODO odstranit?
     GUEST("ROLE_GUEST"), //TODO odstranit?
     CLIENT("ROLE_CLIENT"),
-    COPYWRITE("ROLE_COPYWRITER");
+    COPYWRITER("ROLE_COPYWRITER");
 
     private final String name;
 
@@ -17,5 +17,4 @@ public enum Role {
     public String toString() {
         return name;
     }
-
 }

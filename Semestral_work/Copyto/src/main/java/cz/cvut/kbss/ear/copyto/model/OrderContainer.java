@@ -1,11 +1,13 @@
 package cz.cvut.kbss.ear.copyto.model;
 
+import cz.cvut.kbss.ear.copyto.model.users.User;
+
 import javax.persistence.*;
-import javax.print.attribute.standard.Copies;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "C_OrderContainer")
 @NamedQueries({
         @NamedQuery(name = "OrderContainer.findByAssignee", query = "SELECT o from OrderContainer o WHERE :assignee = o.assignee"),
         @NamedQuery(name = "OrderContainer.findByClient", query = "SELECT o from OrderContainer o WHERE :client = o.client"),

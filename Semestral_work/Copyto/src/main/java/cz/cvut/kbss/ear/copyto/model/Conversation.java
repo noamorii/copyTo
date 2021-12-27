@@ -1,10 +1,13 @@
 package cz.cvut.kbss.ear.copyto.model;
 
+import cz.cvut.kbss.ear.copyto.model.users.User;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "C_Conversation")
 @NamedQueries({
         @NamedQuery(name = "Conversation.findAllConversationsByUser", query = "SELECT m from Conversation m WHERE :user MEMBER OF m.users"),
         @NamedQuery(name = "Conversation.findAllMessages", query = "SELECT c.messages from Conversation c"),
