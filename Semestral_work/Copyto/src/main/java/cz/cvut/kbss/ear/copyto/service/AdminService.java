@@ -5,12 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AdminService {
-
-    private final UserDao userDao;
+public class AdminService extends UserService {
 
     @Autowired
     public AdminService(UserDao userDao){
-        this.userDao = userDao;
+        super(userDao);
     }
 }

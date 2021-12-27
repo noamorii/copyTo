@@ -34,4 +34,12 @@ public class Order extends AbstractEntity{
     @Basic(optional = false)
     @Column(nullable = false)
     private String link;
+
+    public void setCategory(Category category){
+        categories.add(category);
+    }
+
+    public void removeCategory(Category category){
+        categories.remove(category);
+    }
 }

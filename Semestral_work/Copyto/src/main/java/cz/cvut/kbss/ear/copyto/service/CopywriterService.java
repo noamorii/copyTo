@@ -5,14 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CopywriterService {
-
-    private final UserDao userDao;
+public class CopywriterService extends UserService{
 
     @Autowired
     public CopywriterService(UserDao userDao){
-        this.userDao = userDao;
+        super(userDao);
     }
-
 
 }

@@ -24,4 +24,8 @@ public class Category extends AbstractEntity {
     public void setName(String name) {
         this.name = name;
     }
+
+    public void removeOrder(Order order){
+        orders.remove(order);
+    }
 }
