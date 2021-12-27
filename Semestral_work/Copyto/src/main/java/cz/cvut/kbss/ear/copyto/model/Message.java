@@ -33,4 +33,8 @@ public class Message extends AbstractEntity {
         this.receiver = receiver;
         this.text = text;
     }
+
+    public Message() {
+
+    }
 }

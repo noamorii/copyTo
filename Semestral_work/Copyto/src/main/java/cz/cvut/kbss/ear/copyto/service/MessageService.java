@@ -19,69 +19,69 @@ public class MessageService {
     private final MessageDao messageDao;
 
     @Autowired
-    public MessageService(ConversationDao conversationDao, MessageDao messageDao){
+    public MessageService(ConversationDao conversationDao, MessageDao messageDao) {
         this.conversationDao = conversationDao;
         this.messageDao = messageDao;
     }
 
     @Transactional(readOnly = true)
-    public List<Conversation> findConversations(){
+    public List<Conversation> findConversations() {
         return conversationDao.findAll();
     }
 
     @Transactional(readOnly = true)
-    public List<Conversation> findConversations(User user){
+    public List<Conversation> findConversations(User user) {
         return conversationDao.findAllConversationsByUser(user);
     }
 
     @Transactional(readOnly = true)
-    public List<Message> findConversation(){
+    public List<Message> findConversation() {
         return conversationDao.findAllMessagesInContainer();
     }
 
     @Transactional(readOnly = true)
-    public Conversation findConversation(int id){
+    public Conversation findConversation(int id) {
         return conversationDao.find(id);
     }
 
     @Transactional(readOnly = true)
-    public List<Message> findMessages(){
+    public List<Message> findMessages() {
         return messageDao.findAll();
     }
 
     @Transactional(readOnly = true)
-    public List<Message> findMessages(Date date){
+    public List<Message> findMessages(Date date) {
         return messageDao.findAllMessagesByDate(date);
     }
 
     @Transactional(readOnly = true)
-    public List<Message> findMessagesByAuthor(User user){
+    public List<Message> findMessagesByAuthor(User user) {
         return messageDao.findAllMessagesByAuthor(user);
     }
 
     @Transactional(readOnly = true)
-    public List<Message> findMessagesByReceiver(User user){
+    public List<Message> findMessagesByReceiver(User user) {
         return messageDao.findAllMessagesByReceiver(user);
     }
 
     @Transactional(readOnly = true)
-    public Message findMessage(int id){
+    public Message findMessage(int id) {
         return messageDao.find(id);
     }
 
     @Transactional(readOnly = true)
-    public void createConversation(Conversation conversation){
+    public void createConversation(Conversation conversation) {
         conversationDao.persist(conversation);
     }
 
     @Transactional(readOnly = true)
-    public void createMessage(Message message){
+    public void createMessage(Message message) {
         messageDao.persist(message);
     }
 
-    // TODO sendMessage
+    // TODO zkontrolovat
     @Transactional
-    public void sendMessage(User author, User receiver, String text){
+    public void sendMessage(User author, User receiver, String text) {
         Message message = new Message(author, receiver, text);
         messageDao.persist(message);
 
@@ -89,24 +89,53 @@ public class MessageService {
         Conversation toUpdate = null;
 
         // pokud existuje konverzace mezi temito 2 uzivateli
-        for(Conversation c : authorsConversation){
-            if(c.getUsers().contains(receiver) && c.getUsers().size() == 2){
+        for (Conversation c : authorsConversation) {
+            if (c.getUsers().contains(receiver) && c.getUsers().size() == 2) {
                 toUpdate = c;
                 break;
             }
         }
 
-        if(toUpdate == null){
-            toUpdate = new
+        if (toUpdate == null) {
+            toUpdate = new Conversation();
+            toUpdate.addMember(receiver);
+            toUpdate.addMember(author);
+            toUpdate.addMessage(message);
+            conversationDao.persist(toUpdate);
+        } else {
+            toUpdate.addMessage(message);
+            conversationDao.update(toUpdate);
         }
-
-
-
-
-
     }
 
-    // TODO send group message
+    // TODO otestovat
+    @Transactional
+    public void sendGroupMessage(User author, List<User> receivers, String text) {
+        for (User receiver : receivers) {
+            Message message = new Message(author, receiver, text);
+            messageDao.persist(message);
+        }
+
+        List<Conversation> authorsConversation = findConversations(author);
+        Conversation toUpdate = null;
+
+        for (Conversation forControl : authorsConversation) {
+            if (authorsConversation.containsAll(receivers)) {
+                toUpdate.addMessage(new Message(author, receivers.get(0), text));
+                conversationDao.update(toUpdate);
+                return;
+            }
+        }
+
+        toUpdate = new Conversation();
+        for (User receiver : receivers) {
+            toUpdate.addMember(receiver);
+        }
+        toUpdate.addMember(author);
+        toUpdate.addMessage(new Message(author, receivers.get(0), text));
+        conversationDao.persist(toUpdate);
+
+    }
 }
 
 

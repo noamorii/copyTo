@@ -16,13 +16,22 @@ public class Conversation extends AbstractEntity{
     private List<Message> messages = new ArrayList<>();
 
     @ManyToMany
-    private List<User> users = new ArrayList<>();
+    private List<User> members = new ArrayList<>();
+
 
     public List<Message> getMessages() {
         return messages;
     }
 
     public List<User> getUsers() {
-        return users;
+        return members;
+    }
+
+    public void addMember(User user){
+        members.add(user);
+    }
+
+    public void addMessage(Message message){
+        messages.add(message);
     }
 }
