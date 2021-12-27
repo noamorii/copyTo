@@ -1,6 +1,9 @@
 package cz.cvut.kbss.ear.copyto.model;
 
-public class Workplace {
+import javax.persistence.Entity;
+
+@Entity
+public class Workplace extends AbstractEntity{
 
 
 }
