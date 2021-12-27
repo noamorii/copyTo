@@ -36,11 +36,34 @@ public class Order extends AbstractEntity{
     @Column(nullable = false)
     private String link;
 
+    // TOTO mapovani enumu
+    private OrderState state = OrderState.ADDED;
+
     public void setCategory(Category category){
         categories.add(category);
     }
 
     public void removeCategory(Category category){
         categories.remove(category);
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public Date getInsertionDate() {
+        return insertionDate;
+    }
+
+    public Date getDeadline() {
+        return deadline;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public OrderState getState() {
+        return state;
     }
 }
