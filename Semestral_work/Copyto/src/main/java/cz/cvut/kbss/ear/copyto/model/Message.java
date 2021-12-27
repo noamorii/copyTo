@@ -28,4 +28,9 @@ public class Message extends AbstractEntity {
     private Date date = new Date();
 
 
+    public Message(User author, User receiver, String text) {
+        this.author = author;
+        this.receiver = receiver;
+        this.text = text;
+    }
 }
