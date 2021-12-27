@@ -13,8 +13,8 @@ public class Category extends AbstractEntity {
     @ManyToMany(mappedBy = "categories")
     private List<Order> orders = new ArrayList<>();
 
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String name;
-
-
 
 }
