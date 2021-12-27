@@ -11,7 +11,7 @@ import javax.annotation.PostConstruct;
 @Component
 public class SystemInitializer {
 
-   /* private static final Logger LOG = LoggerFactory.getLogger(SystemInitializer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SystemInitializer.class);
 
     private final UserService userService;
 
@@ -30,8 +30,9 @@ public class SystemInitializer {
         txTemplate.execute((status) -> {
             //generateAdmin();
             return null;
-        });*/
+        });
     }
+}
 
     /**
      * Generates an admin account if it does not already exist.
@@ -49,4 +50,4 @@ public class SystemInitializer {
         LOG.info("Generated admin user with credentials " + admin.getUsername() + "/" + admin.getPassword());
         userService.persist(admin);
     } //TODO*/
-/*}*/
+

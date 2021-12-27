@@ -51,4 +51,8 @@ public class User extends AbstractEntity {
     @Basic(optional = false)
     @Column(nullable = false)
     protected Role role = Role.USER;
+
+    public Role getRole() {
+        return role;
+    }
 }

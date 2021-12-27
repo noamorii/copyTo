@@ -2,17 +2,23 @@ package cz.cvut.kbss.ear.copyto.service;
 
 import cz.cvut.kbss.ear.copyto.dao.OrderContainerDao;
 import cz.cvut.kbss.ear.copyto.dao.OrderDao;
+import cz.cvut.kbss.ear.copyto.enums.Role;
+import cz.cvut.kbss.ear.copyto.model.Category;
 import cz.cvut.kbss.ear.copyto.model.Order;
+import cz.cvut.kbss.ear.copyto.model.OrderContainer;
 import cz.cvut.kbss.ear.copyto.model.OrderState;
+import cz.cvut.kbss.ear.copyto.model.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.*;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -30,6 +36,16 @@ public class OrderService {
     @Transactional(readOnly = true)
     public List<Order> findOrders() {
         return orderDao.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Order> findContainersByClient() {
+        return containerDao.findAvailableOrders();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Order> findOrders(Category category) {
+        return orderDao.findAllByCategory(category);
     }
 
     @Transactional(readOnly = true)
@@ -84,6 +100,88 @@ public class OrderService {
         return toReturn;
     }
 
+    @Transactional(readOnly = true)
+    public List<OrderContainer> findContainers() {
+        return containerDao.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<OrderContainer> findContainersByAssignee(User user) {
+        return containerDao.findByAssignee(user);
+    }
+
+    @Transactional(readOnly = true)
+    public List<OrderContainer> findContainersByClient(User user) {
+        return containerDao.findByClient(user);
+    }
+
+    @Transactional(readOnly = true) // TODO RENAME
+    public OrderContainer findContainer(int id) {
+        return containerDao.find(id);
+    }
+
+    @Transactional(readOnly = true) // TODO RENAME
+    public OrderContainer findContainer(Order order) {
+        return containerDao.findByDetail(order);
+    }
+
+    @Transactional(readOnly = true)
+    public List<User> findCandidates() {
+        return containerDao.findAllCandidates();
+    }
 
 
+
+    @Transactional
+    public void createContainer(OrderContainer container) {
+        containerDao.persist(container);
+    }
+
+    @Transactional
+    public void addOrder(Order order) {
+        orderDao.persist(order);
+    }
+
+    @Transactional
+    public void update(OrderContainer container) {
+        containerDao.update(container);
+    }
+
+    @Transactional
+    public void update(Order order) {
+        orderDao.update(order);
+    }
+
+    @Transactional
+    public void remove(OrderContainer container) {
+        Objects.requireNonNull(container);
+        containerDao.remove(container);
+    }
+
+    @Transactional
+    public void addAssignee(OrderContainer container, User assignee){
+        container.setAssignee(assignee);
+        containerDao.update(container);
+    }
+
+    @Transactional
+    public void changeAssignee(OrderContainer order, User assignee){
+        order.setAssignee(assignee);
+        containerDao.update(order);
+    }
+
+    @Transactional
+    public void signUpForOrder(User candidate, Order order){
+        if(candidate.getRole() == Role.COPYWRITER){
+            OrderContainer container = containerDao.findByDetail(order);
+            container.addCandidate(candidate);
+            containerDao.update(container);
+        }
+    }
+
+    @Transactional
+    public void changeVisibility(OrderContainer container){
+        container.setOpen(!container.isOpen());
+        containerDao.update(container);
+    }
 }
