@@ -14,6 +14,7 @@ import java.util.Date;
         @NamedQuery(name = "Message.findAllMessagesByText", query = "SELECT m from Message m WHERE :text = m.text"),
         @NamedQuery(name = "Message.findAllMessagesByDate", query = "SELECT m from Message m WHERE :date = m.date")
 })
+
 public class Message extends AbstractEntity {
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
@@ -30,7 +31,6 @@ public class Message extends AbstractEntity {
     @Column(nullable = false)
     private Date date = new Date();
 
-
     public Message(User author, User receiver, String text) {
         this.author = author;
         this.receiver = receiver;
@@ -38,6 +38,5 @@ public class Message extends AbstractEntity {
     }
 
     public Message() {
-
     }
 }

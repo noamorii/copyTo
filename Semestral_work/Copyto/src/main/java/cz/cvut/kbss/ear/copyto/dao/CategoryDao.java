@@ -3,6 +3,9 @@ package cz.cvut.kbss.ear.copyto.dao;
 import cz.cvut.kbss.ear.copyto.model.Category;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 @Repository
 public class CategoryDao extends BaseDao<Category>{
 
