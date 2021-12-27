@@ -6,6 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "OrderContainer.findByAssignee", query = "SELECT o from OrderContainer o WHERE :assignee = o.assignee"),
+        @NamedQuery(name = "OrderContainer.findByClient", query = "SELECT o from OrderContainer o WHERE :client = o.client"),
+        @NamedQuery(name = "OrderContainer.findByOrder", query = "SELECT o from OrderContainer o WHERE :order = o.order"),
+        @NamedQuery(name = "OrderContainer.findAllCandidates", query = "SELECT o.candidates from OrderContainer o"),
+        @NamedQuery(name = "OrderContainer.findAvailableOrders", query = "SELECT o.order FROM OrderContainer o WHERE o.assignee is null" ),
+})
 public class OrderContainer extends AbstractEntity{
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REMOVE})

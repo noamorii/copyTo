@@ -2,15 +2,17 @@ package cz.cvut.kbss.ear.copyto.model;
 
 import cz.cvut.kbss.ear.copyto.enums.Role;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "User.findByRole", query = "SELECT u FROM User u WHERE :role = u.role"),
+        @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE :email = u.email"),
+        @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE :firstName = u.firstName and :surname = u.surname")
+})
 public class User extends AbstractEntity{
 
     @ManyToMany
@@ -44,7 +46,4 @@ public class User extends AbstractEntity{
     @Basic(optional = false)
     @Column(nullable = false)
     private Role role = Role.USER;
-
-
-
 }

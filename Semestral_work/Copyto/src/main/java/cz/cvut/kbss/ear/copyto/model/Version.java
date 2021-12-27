@@ -1,11 +1,13 @@
 package cz.cvut.kbss.ear.copyto.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Version.findByDate", query = "SELECT v FROM Version v WHERE :date = v.date"),
+        @NamedQuery(name = "Version.findByTitle", query = "SELECT v FROM Version v WHERE :title = v.title")
+})
 public class Version extends AbstractEntity{
 
     @Basic(optional = false)

@@ -6,6 +6,13 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Order.findAllByCategory", query = "SELECT o from Order o WHERE :category MEMBER OF o.categories"),
+        @NamedQuery(name = "Order.findAllByDeadline", query = "SELECT o from Order o WHERE :deadline > o.deadline"),
+        @NamedQuery(name = "Order.findAllByInsertionDate", query = "SELECT o from Order o WHERE :insertionDate = o.insertionDate"),
+        @NamedQuery(name = "Order.findByLink", query = "SELECT o from Order o WHERE :link = o.link"),
+        @NamedQuery(name = "Order.findByPrice", query = "SELECT o from Order o WHERE :price = o.price")
+})
 public class Order extends AbstractEntity{
 
     @ManyToMany
@@ -27,7 +34,4 @@ public class Order extends AbstractEntity{
     @Basic(optional = false)
     @Column(nullable = false)
     private String link;
-
-
-
 }

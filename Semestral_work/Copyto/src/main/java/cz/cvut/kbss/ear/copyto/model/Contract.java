@@ -4,6 +4,13 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Contract.findAllByClient", query = "SELECT c FROM Contract c WHERE :client = c.client"),
+        @NamedQuery(name = "Contract.findAllByCopywriter", query = "SELECT c FROM Contract c WHERE :copywriter = c.copywriter"),
+        @NamedQuery(name = "Contract.findByOrder", query = "SELECT c FROM Contract c WHERE :order = c.order"),
+        @NamedQuery(name = "Contract.findAllByDateOfAgreement", query = "SELECT c FROM Contract c WHERE :dateOfAgreement = c.dateOfAgreement"),
+        @NamedQuery(name = "Contract.findAllByDate", query = "SELECT c FROM Contract c WHERE :date = c.date")
+})
 public class Contract extends AbstractEntity{
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})

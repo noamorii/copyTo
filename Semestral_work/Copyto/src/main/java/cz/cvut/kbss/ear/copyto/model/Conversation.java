@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Conversation.findAllConversationsByUser", query = "SELECT m from Conversation m WHERE :user MEMBER OF m.users"),
+        @NamedQuery(name = "Conversation.findAllMessages", query = "SELECT c.messages from Conversation c"),
+})
 public class Conversation extends AbstractEntity{
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
@@ -13,6 +17,4 @@ public class Conversation extends AbstractEntity{
 
     @ManyToMany
     private List<User> users = new ArrayList<>();
-
-
 }
