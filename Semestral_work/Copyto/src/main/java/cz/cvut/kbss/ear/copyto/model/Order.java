@@ -2,9 +2,8 @@ package cz.cvut.kbss.ear.copyto.model;
 
 import javax.persistence.*;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 public class Order extends AbstractEntity{
@@ -19,7 +18,7 @@ public class Order extends AbstractEntity{
 
     @Basic(optional = false)
     @Column(nullable = false)
-    private Date insertionDate;
+    private Date insertionDate = new Date();
 
     @Basic(optional = false)
     @Column(nullable = true) // TODO kontrola

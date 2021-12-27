@@ -1,4 +1,7 @@
 package cz.cvut.kbss.ear.copyto.model;
 
-public class User {
+import javax.persistence.Entity;
+
+@Entity
+public class User extends AbstractEntity{
 }
