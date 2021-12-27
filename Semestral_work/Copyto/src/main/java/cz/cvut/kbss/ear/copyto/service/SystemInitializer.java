@@ -1,5 +1,7 @@
 package cz.cvut.kbss.ear.copyto.service;
 
+import cz.cvut.kbss.ear.copyto.enums.Role;
+import cz.cvut.kbss.ear.copyto.model.users.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +10,16 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.PostConstruct;
+
 @Component
 public class SystemInitializer {
 
     private static final Logger LOG = LoggerFactory.getLogger(SystemInitializer.class);
+
+    /**
+     * Default admin username
+     */
+    private static final String ADMIN_USERNAME = "ear-admin@kbss.felk.cvut.cz";
 
     private final UserService userService;
 
@@ -32,22 +40,21 @@ public class SystemInitializer {
             return null;
         });
     }
-}
 
     /**
      * Generates an admin account if it does not already exist.
-     */
-/*    private void generateAdmin() {
+     */ // TODO
+    private void generateAdmin() {
         if (userService.exists(ADMIN_USERNAME)) {
             return;
         }
         final User admin = new User();
-        admin.setUsername(ADMIN_USERNAME);
+        admin.setEmail(ADMIN_USERNAME);
         admin.setFirstName("System");
-        admin.setLastName("Administrator");
+        admin.setSurname("Administrator");
         admin.setPassword("adm1n");
         admin.setRole(Role.ADMIN);
-        LOG.info("Generated admin user with credentials " + admin.getUsername() + "/" + admin.getPassword());
-        userService.persist(admin);
-    } //TODO*/
-
+        LOG.info("Generated admin user with credentials " + admin.getEmail() + "/" + admin.getPassword());
+        userService.createAccount(admin);
+    }
+}

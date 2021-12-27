@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Table(name = "C_Conversation")
 @NamedQueries({
-        @NamedQuery(name = "Conversation.findAllConversationsByUser", query = "SELECT m from Conversation m WHERE :user MEMBER OF m.users"),
+        @NamedQuery(name = "Conversation.findAllConversationsByUser", query = "SELECT m from Conversation m WHERE :user MEMBER OF m.members"),
         @NamedQuery(name = "Conversation.findAllMessages", query = "SELECT c.messages from Conversation c"),
 })
 public class Conversation extends AbstractEntity{
