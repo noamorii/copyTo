@@ -52,6 +52,18 @@ public class User extends AbstractEntity {
     @Column(nullable = false)
     protected Role role = Role.USER;
 
+    public User(String firstName, String surname, String password, String mobile, String email, Date dateOfBirth) {
+        this.firstName = firstName;
+        this.surname = surname;
+        this.password = password;
+        this.mobile = mobile;
+        this.email = email;
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public User() {
+    }
+
     public Role getRole() {
         return role;
     }
@@ -82,5 +94,9 @@ public class User extends AbstractEntity {
 
     public String getEmail() {
         return email;
+    }
+
+    public void erasePassword(){
+        this.password = "";
     }
 }
