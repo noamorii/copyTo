@@ -2,6 +2,7 @@ package cz.cvut.kbss.ear.copyto.model;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,9 +17,16 @@ import java.util.List;
 })
 public class Order extends AbstractEntity{
 
+    public Order(){}
+    public Order(double price, Date deadlineDate) {
+        this.price = price;
+        this.deadline = deadlineDate;
+        this.insertionDate = new Date();
+    }
+
     @ManyToMany
     @OrderBy("name")
-    private List<Category> categories;
+    private List<Category> categories = new ArrayList<>();
 
     @Basic(optional = false)
     @Column(nullable = true) // TODO kontrola
@@ -33,7 +41,7 @@ public class Order extends AbstractEntity{
     private Date deadline;
 
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(nullable = true) //todo ask ondra
     private String link;
 
     // TOTO mapovani enumu

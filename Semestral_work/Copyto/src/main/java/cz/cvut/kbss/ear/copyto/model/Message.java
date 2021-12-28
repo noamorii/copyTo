@@ -39,4 +39,16 @@ public class Message extends AbstractEntity {
 
     public Message() {
     }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public User getReceiver() {
+        return receiver;
+    }
+
+    public String getText() {
+        return text;
+    }
 }

@@ -56,6 +56,14 @@ public class User extends AbstractEntity {
         return role;
     }
 
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
