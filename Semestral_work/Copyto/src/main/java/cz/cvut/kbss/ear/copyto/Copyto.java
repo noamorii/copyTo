@@ -17,6 +17,8 @@ public class Copyto {
     public static void main(String[] args) {
 
         SpringApplication.run(Copyto.class, args);
+
+        System.out.println("ahoj");
     }
 
 }

@@ -1,7 +1,6 @@
 package cz.cvut.kbss.ear.copyto.security;
 
 import cz.cvut.kbss.ear.copyto.model.users.User;
-import cz.cvut.kbss.ear.copyto.model.users.User;
 import cz.cvut.kbss.ear.copyto.security.model.AuthenticationToken;
 import cz.cvut.kbss.ear.copyto.security.model.UserDetails;
 import org.springframework.security.core.context.SecurityContext;

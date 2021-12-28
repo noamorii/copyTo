@@ -36,6 +36,9 @@ public class OrderContainer extends AbstractEntity{
     @Column(nullable = false)
     private boolean open = true;
 
+    public Order getOrder() {
+        return order;
+    }
 
     public void setAssignee(User assignee) {
         this.assignee = assignee;
