@@ -10,9 +10,17 @@ import java.util.List;
 @Table(name = "C_Conversation")
 @NamedQueries({
         @NamedQuery(name = "Conversation.findAllConversationsByUser", query = "SELECT m from Conversation m WHERE :user MEMBER OF m.members"),
-        @NamedQuery(name = "Conversation.findAllMessages", query = "SELECT c.messages from Conversation c"),
+        @NamedQuery(name = "Conversation.findAllMessages", query = "SELECT c.messages from Conversation c WHERE :c_id = c.id"),
 })
 public class Conversation extends AbstractEntity{
+
+    public Conversation(List<User> members) {
+        this.members = members;
+
+        for (User member : members) {
+            member.addConversation(this);
+        }
+    }
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     @JoinColumn(name = "messageId")
@@ -21,6 +29,9 @@ public class Conversation extends AbstractEntity{
     @ManyToMany
     private List<User> members = new ArrayList<>();
 
+    public Conversation() {
+
+    }
 
     public List<Message> getMessages() {
         return messages;

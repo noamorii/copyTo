@@ -1,7 +1,6 @@
 package cz.cvut.kbss.ear.copyto.dao;
 
 import cz.cvut.kbss.ear.copyto.Copyto;
-import cz.cvut.kbss.ear.copyto.dao.CategoryDao;
 import cz.cvut.kbss.ear.copyto.environment.Generator;
 import cz.cvut.kbss.ear.copyto.environment.TestConfiguration;
 import cz.cvut.kbss.ear.copyto.model.Category;

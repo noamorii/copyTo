@@ -68,6 +68,14 @@ public class User extends AbstractEntity {
         return role;
     }
 
+    public void addConversation(Conversation conversation) {
+        conversations.add(conversation);
+    }
+
+    public List<Conversation> getConversations() {
+        return conversations;
+    }
+
     public void setMobile(String mobile) {
         this.mobile = mobile;
     }

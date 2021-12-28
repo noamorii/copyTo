@@ -1,14 +1,16 @@
 package cz.cvut.kbss.ear.copyto.dao;
 
 import cz.cvut.kbss.ear.copyto.enums.Role;
-import cz.cvut.kbss.ear.copyto.model.*;
+import cz.cvut.kbss.ear.copyto.model.Category;
+import cz.cvut.kbss.ear.copyto.model.Message;
+import cz.cvut.kbss.ear.copyto.model.Order;
+import cz.cvut.kbss.ear.copyto.model.Workplace;
 import cz.cvut.kbss.ear.copyto.model.users.Client;
 import cz.cvut.kbss.ear.copyto.model.users.Copywriter;
 import cz.cvut.kbss.ear.copyto.model.users.User;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +39,7 @@ public class Generator {
         client.setDateOfBirth(new Date());
         client.setMobile("" + ((RAND.nextInt(7)+1) * 100));
         client.setRole(Role.CLIENT);
+        client.setPassword(RandomStringUtils.randomAlphabetic(10));
         return client;
 
     }
@@ -50,6 +53,7 @@ public class Generator {
         copywriter.setDateOfBirth(new Date());
         copywriter.setMobile("" + ((RAND.nextInt(7)+1) * 100));
         copywriter.setRole(Role.CLIENT);
+        copywriter.setPassword(RandomStringUtils.randomAlphabetic(10));
         return copywriter;
     }
 
@@ -60,7 +64,6 @@ public class Generator {
                            generateCopywriter(),
                            RandomStringUtils.randomAlphabetic(40));
     }
-
     /*============ORDERS GENERATOR===============*/
 
     public static Order generateOrder() {

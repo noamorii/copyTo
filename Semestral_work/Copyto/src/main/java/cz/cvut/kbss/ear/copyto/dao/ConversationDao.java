@@ -21,8 +21,8 @@ public class ConversationDao extends BaseDao<Conversation> {
                 .getResultList();
     }
 
-    public List<Message> findAllMessagesInContainer(){
-        return em.createNamedQuery("Conversation.findAllMessages", Message.class)
+    public List<Message> findAllMessagesInContainer(Conversation conversation){
+        return em.createNamedQuery("Conversation.findAllMessages", Message.class).setParameter("c_id", conversation.getId())
                 .getResultList();
     }
 }

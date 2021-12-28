@@ -2,8 +2,8 @@ package cz.cvut.kbss.ear.copyto.dao;
 
 import cz.cvut.kbss.ear.copyto.Copyto;
 import cz.cvut.kbss.ear.copyto.environment.TestConfiguration;
+import cz.cvut.kbss.ear.copyto.model.Conversation;
 import cz.cvut.kbss.ear.copyto.model.Message;
-
 import cz.cvut.kbss.ear.copyto.model.users.User;
 import cz.cvut.kbss.ear.copyto.service.SystemInitializer;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,11 @@ import org.springframework.context.annotation.FilterType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 @ComponentScan(basePackageClasses = Copyto.class, excludeFilters = {
@@ -34,57 +38,72 @@ public class MessageDaoTest {
 
     @Test
     public void findAllMessagesByUser() {
-        Message message = Generator.generateMessage();
-        em.persist(message);
+        Message ExpecteMessage = Generator.generateMessage();
+        em.persist(ExpecteMessage);
 
-        User userFrom = message.getAuthor();
+        User userFrom = ExpecteMessage.getAuthor();
         em.persist(userFrom);
-        User userTo = message.getReceiver();
+        User userTo = ExpecteMessage.getReceiver();
         em.persist(userTo);
 
-//        userFrom.sendMessageTo(userTo, message);
-//
-//        assertEquals(userTo.getMessages().get(0).getText(),
-//                messageDao.findAllMessagesByUser(userTo).get(0).getText());
+        Message messageFromAuthor = messageDao.findAllMessagesByAuthor(userFrom).get(0);
+        Message messageFromReceiver = messageDao.findAllMessagesByReceiver(userTo).get(0);
+
+        assertEquals(ExpecteMessage, messageFromAuthor);
+        assertEquals(ExpecteMessage, messageFromReceiver);
     }
 
-//    @Test
-//    public void findAllMessageContainersByUser() {
-//        MessageContainer messageContainer = generateMessageContainer();
-//        List<User> usersInContainer = messageContainer.getUsers();
-//        for (User user : usersInContainer) {
-//            assertEquals(1, messageContainerDao.findAllMessageContainersByUser(user).size());
-//        }
-//    }
-//
-//    public MessageContainer generateMessageContainer(){
-//        final MessageContainer m = new MessageContainer();
-//        em.persist(m);
-//        ArrayList<User> users = new ArrayList<>();
-//        ArrayList<Message> messages = new ArrayList<>();
-//
-//        for(int i = 0; i < 20; i++) {
-//
-//            Message message = Generator.generateMessage();
-//            em.persist(message);
-//            messages.add(message);
-//
-//            if (!users.contains(message.getReceiver()) && !users.contains(message.getAuthor())) {
-//                User author = message.getAuthor();
-//                em.persist(author);
-//
-//                User receiver = message.getReceiver();
-//                em.persist(receiver);
-//
-//                users.add(author);
-//                users.add(receiver);
-//            }
-//        }
-//
-//        m.setUsers(users);
-//        m.setMessages(messages);
-//
-//        return m;
-//    }
+    @Test
+    public void findAllMessageConversationsByUser() {
+        
+        User author = Generator.generateClient();
+        em.persist(author);
+        User receiver1 = Generator.generateCopywriter();
+        User receiver2 = Generator.generateCopywriter();
+        User receiver3 = Generator.generateCopywriter();
+        em.persist(receiver1);
+        em.persist(receiver2);
+        em.persist(receiver3);
+        
+        Conversation conversation1 = new Conversation(new ArrayList<>(Arrays.asList(author, receiver1)));
+        Conversation conversation2 = new Conversation(new ArrayList<>(Arrays.asList(author, receiver2)));
+        Conversation conversation3 = new Conversation(new ArrayList<>(Arrays.asList(author, receiver3)));
+        em.persist(conversation1);
+        em.persist(conversation2);
+        em.persist(conversation3);
+
+        List<Conversation> allConversations = author.getConversations();
+        List<Conversation> foundConversations = conversationDao.findAllConversationsByUser(author);
+
+        allConversations.sort(Comparator.comparing(Conversation::getId));
+        foundConversations.sort(Comparator.comparing(Conversation::getId));
+
+        assertEquals(allConversations, foundConversations);
+    }
+
+    @Test
+    public void findAllMessagesInConversation() {
+
+        User author = Generator.generateClient();
+        em.persist(author);
+        User receiver1 = Generator.generateCopywriter();
+        em.persist(receiver1);
+
+        Conversation conversation = new Conversation(new ArrayList<>(Arrays.asList(author, receiver1)));
+        em.persist(conversation);
+
+        Message message1 = new Message(author, receiver1, "Hello, author");
+        Message message2 = new Message(receiver1, author, "Hello, receiver");
+        em.persist(message1);
+        em.persist(message2);
+
+       conversation.addMessage(message1);
+       conversation.addMessage(message2);
+
+       List<Message> foundMessages = conversationDao.findAllMessagesInContainer(conversation);
+
+        assertEquals(foundMessages, conversation.getMessages());
+        assertEquals(2, conversation.getMessages().size());
+    }
 }
 

@@ -35,8 +35,8 @@ public class MessageService {
     }
 
     @Transactional(readOnly = true)
-    public List<Message> findConversation() {
-        return conversationDao.findAllMessagesInContainer();
+    public List<Message> findAllMessagesInConversation(Conversation conversation) {
+        return conversationDao.findAllMessagesInContainer(conversation);
     }
 
     @Transactional(readOnly = true)
