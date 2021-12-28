@@ -7,7 +7,6 @@ import cz.cvut.kbss.ear.copyto.model.Order;
 import cz.cvut.kbss.ear.copyto.model.OrderContainer;
 import cz.cvut.kbss.ear.copyto.model.users.Client;
 import cz.cvut.kbss.ear.copyto.model.users.Copywriter;
-import cz.cvut.kbss.ear.copyto.model.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,5 +48,4 @@ public class ClientService extends UserService{
         container.setAssignee(assignee);
         containerDao.update(container);
     }
-
 }
