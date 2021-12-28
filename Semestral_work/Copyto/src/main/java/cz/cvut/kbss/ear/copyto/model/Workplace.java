@@ -19,4 +19,24 @@ public class Workplace extends AbstractEntity{
     @Basic(optional = false)
     @Column(nullable = false)
     boolean editable = true;
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
+
+    public void addVersion(Version version){
+        versions.add(version);
+    }
+
+    public void removeVersion(Version version){
+        versions.remove(version);
+    }
+
+    public void setVersions(List<Version> versions) {
+        this.versions = versions;
+    }
+
+    public Version getLastVersion(){
+        return versions.get(versions.size()-1);
+    }
 }

@@ -41,5 +41,23 @@ public class Contract extends AbstractEntity{
 
     @Basic(optional = false)
     @Column(nullable = true)
-    private double penalty;
+    private double penalty = 0;
+
+    public Contract(User client, User copywriter, Order order, Date dateOfAgreement, double price) {
+        this.client = client;
+        this.copywriter = copywriter;
+        this.order = order;
+        this.dateOfAgreement = dateOfAgreement;
+        this.price = price;
+    }
+
+    public Contract(User client, User copywriter, Order order, Date date, double price, double penalty) {
+        this.client = client;
+        this.copywriter = copywriter;
+        this.order = order;
+        this.date = date;
+        this.price = price;
+        this.penalty = penalty;
+    }
+
 }

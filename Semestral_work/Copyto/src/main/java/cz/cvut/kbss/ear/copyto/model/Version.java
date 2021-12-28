@@ -22,4 +22,12 @@ public class Version extends AbstractEntity{
     @Basic(optional = false)
     @Column(nullable = false)
     private String text = "";
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 }
