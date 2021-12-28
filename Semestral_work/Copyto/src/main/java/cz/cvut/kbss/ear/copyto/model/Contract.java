@@ -60,4 +60,6 @@ public class Contract extends AbstractEntity{
         this.penalty = penalty;
     }
 
+    public Contract() {
+    }
 }
