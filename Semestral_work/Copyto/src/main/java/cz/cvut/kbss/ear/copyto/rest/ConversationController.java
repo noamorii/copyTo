@@ -58,6 +58,4 @@ public class ConversationController {
     }
 
     // TODO by user
-
-
 }
