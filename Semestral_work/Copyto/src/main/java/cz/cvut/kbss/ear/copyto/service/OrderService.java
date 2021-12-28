@@ -34,6 +34,11 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
+    public Order findOrder(Integer id) {
+        return orderDao.find(id);
+    }
+
+    @Transactional(readOnly = true)
     public List<Order> findOrders() {
         return orderDao.findAll();
     }

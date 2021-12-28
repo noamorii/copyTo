@@ -75,6 +75,14 @@ public class CategoryController {
         return orderService.findOrders(getById(id));
     }
 
+    @GetMapping(value = "/{id}/orders", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<OrderContainer> getOrdersContainersByCategory(@PathVariable Integer id) {
+        List<OrderContainer> containers = new ArrayList<>();
+        for (Order detail : orderService.findOrders(getById(id))) {
+            containers.add(orderService.findContainer(detail));
+        } return containers;
+    }
+
     // --------------------DELETE--------------------------------------
 
     @DeleteMapping(value = "/{categoryId}/orders/{orderId}")
