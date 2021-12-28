@@ -27,7 +27,7 @@ public class OrderContainer extends AbstractEntity{
     private Order order;
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-    private Workplace workplace;
+    private Workplace workplace = new Workplace();
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     private List<User> candidates = new ArrayList<>();
@@ -35,6 +35,7 @@ public class OrderContainer extends AbstractEntity{
     @Basic(optional = false)
     @Column(nullable = false)
     private boolean open = true;
+
 
     public void setAssignee(User assignee) {
         this.assignee = assignee;
@@ -50,6 +51,18 @@ public class OrderContainer extends AbstractEntity{
 
     public void setOpen(boolean val){
         open = val;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public void setClient(User client) {
+        this.client = client;
+    }
+
+    public void setWorkplace(Workplace workplace) {
+        this.workplace = workplace;
     }
 }
 
