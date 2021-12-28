@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rest/orders")
+@RequestMapping("/rest/controllers")
 public class OrderContainerController {
 
     private static final Logger LOG = (Logger) LoggerFactory.getLogger(OrderContainerController.class);
@@ -48,7 +48,7 @@ public class OrderContainerController {
     public ResponseEntity<Void> createOrderContainer(@RequestBody OrderContainer container) {
         orderService.createContainer(container);
         LOG.debug("create container {}.", container);
-        final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/{id}", container.getId());
+        final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/ordercontainer{id}", container.getId());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 

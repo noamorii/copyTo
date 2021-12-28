@@ -70,18 +70,20 @@ public class CategoryController {
     }
 
 
-    @GetMapping(value = "/{id}/orderDetails", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}/orders", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Order> getOrdersByCategory(@PathVariable Integer id) {
         return orderService.findOrders(getById(id));
     }
 
-    @GetMapping(value = "/{id}/orders", produces = MediaType.APPLICATION_JSON_VALUE)
+
+    // TODO tohle se mi nezda
+/*    @GetMapping(value = "/{id}/orders", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<OrderContainer> getOrdersContainersByCategory(@PathVariable Integer id) {
         List<OrderContainer> containers = new ArrayList<>();
         for (Order detail : orderService.findOrders(getById(id))) {
             containers.add(orderService.findContainer(detail));
         } return containers;
-    }
+    }*/
 
     // --------------------DELETE--------------------------------------
 

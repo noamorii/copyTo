@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rest/Versions")
+@RequestMapping("/rest/versions")
 public class VersionController {
 
     private static final Logger LOG = (Logger) LoggerFactory.getLogger(WorkplaceController.class);

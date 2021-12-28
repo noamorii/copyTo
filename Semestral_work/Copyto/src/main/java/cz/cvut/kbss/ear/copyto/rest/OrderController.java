@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rest/Details")
+@RequestMapping("/rest/orders")
 public class OrderController {
 
     private static final Logger LOG = (Logger) LoggerFactory.getLogger(OrderContainerController.class);
@@ -35,10 +35,10 @@ public class OrderController {
 
     // TODO filter
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createOrderDetail(@RequestBody Order order) {
+    public ResponseEntity<Void> createOrder(@RequestBody Order order) {
         orderService.addOrder(order);
         LOG.debug("create order {}.", order);
-        final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/{id}", order.getId());
+        final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/order/{id}", order.getId());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 

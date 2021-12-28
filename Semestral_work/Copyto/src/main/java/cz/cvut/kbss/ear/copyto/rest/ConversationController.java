@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
+@RequestMapping("/rest/Conversations")
 public class ConversationController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConversationController.class);
