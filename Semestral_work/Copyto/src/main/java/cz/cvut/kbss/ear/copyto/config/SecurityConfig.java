@@ -1,5 +1,5 @@
-/*
 package cz.cvut.kbss.ear.copyto.config;
+
 
 import cz.cvut.kbss.ear.copyto.security.SecurityConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,4 +75,3 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().sessionManagement().maximumSessions(1);
     }
 }
-*/
