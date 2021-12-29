@@ -18,6 +18,7 @@ import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -33,19 +34,7 @@ public class VersionController {
         this.workplaceService = workplaceService;
     }
 
-    //@PostFilter("hasRole('ADMIN')") // TODO
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Version> getVersions() {
-        return workplaceService.findVersions();
-    }
-
-    @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Version getById(@PathVariable Integer id) {
-        final Version version = workplaceService.findVersion(id);
-        if (version == null) {
-            throw NotFoundException.create("Version", id);
-        } return version;
-    }
+    // --------------------CREATE--------------------------------------
 
     //TODO
     @PostMapping(value = "workplace-id/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -58,26 +47,70 @@ public class VersionController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    // TODO filter
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    // --------------------READ--------------------------------------
+
+    @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Version getById(@PathVariable Integer id) {
+        final Version version = workplaceService.findVersion(id);
+        if (version == null) {
+            throw NotFoundException.create("Version", id);
+        } return version;
+    }
+
+    //@PostFilter("hasRole('ADMIN')") // TODO
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Version> getVersions() {
+        return workplaceService.findVersions();
+    }
+
+    // TODO correct format pro date?
+    /*@GetMapping(value = "/date/{date}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Version> getByDate(@PathVariable Date date) {
+        final List<Version> versions = workplaceService.findVersion(date);
+        if (versions == null) {
+            throw NotFoundException.create("Version", date);
+        } return versions;
+    }*/
+
+    @GetMapping(value = "/title/{title}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Version> getByTitle(@PathVariable String title) {
+        final List<Version> versions = workplaceService.findVersion(title);
+        if (versions == null) {
+            throw NotFoundException.create("Version", title);
+        } return versions;
+    }
+
+    // --------------------UPDATE--------------------------------------
+
+    // TODO filter + otazka proc to nefunguje s tim equals
+    @PutMapping(value = "/id/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateVersion(@PathVariable Integer id, @RequestBody Version version) {
         final Version original = workplaceService.findVersion(id);
-        if(!original.getId().equals(version.getId())){
+/*        if(!original.getId().equals(version.getId())){
             throw new ValidationException("Version identifier in the data does not match the one in the request URL.");
-        }
+        }*/
+        original.setTitle(version.getTitle());
+        original.setText(version.getText());
         workplaceService.update(version);
     }
 
+    // --------------------DELETE--------------------------------------
+
     //@PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeVersion(@PathVariable Integer id, @RequestBody Workplace workplace){
+    public void removeVersion(@PathVariable Integer id){
         final Version toRemove = workplaceService.findVersion(id);
-        if(toRemove == null) {
-            return;
+
+        //TODO find workplace by version a nahradit
+        final List<Workplace> workplaces = workplaceService.findWorkplaces();
+        for(Workplace w : workplaces){
+            if(w.getVersions().contains(toRemove)){
+                workplaceService.remove(w, toRemove);
+                break;
+            }
         }
-        workplaceService.remove(workplace, toRemove);
         LOG.debug("Removed version {}.", toRemove);
     }
 }

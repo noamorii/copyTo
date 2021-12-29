@@ -45,12 +45,13 @@ public class CategoryController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/id/{id}/orders", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/id/{categoryId}/order/{orderId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void addOrderToCategory(@PathVariable Integer id, @RequestBody OrderContainer container) {
-        final Category category = getById(id);
-        categoryService.addOrder(category, container.getOrder());
-        LOG.debug("Order {} added into category {}.", container.getOrder(), category);
+    public void addOrderToCategory(@PathVariable Integer categoryId, @PathVariable Integer orderId) {
+        final Category category = getById(categoryId);
+        final Order order = orderService.findOrder(orderId);
+        categoryService.addOrder(category, order);
+        LOG.debug("Order {} added into category {}.", order, category);
     }
 
     // --------------------READ--------------------------------------
@@ -87,7 +88,7 @@ public class CategoryController {
 
     // --------------------DELETE--------------------------------------
 
-    @DeleteMapping(value = "/{categoryId}/orders/{orderId}")
+    @DeleteMapping(value = "/id/{categoryId}/orders/id/{orderId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeOrderFromCategory(@PathVariable Integer categoryId,
                                         @PathVariable Integer orderId) {
@@ -100,7 +101,8 @@ public class CategoryController {
         LOG.debug("Order {} removed from category {}.", order, category);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping(value = "/id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeCategory(@PathVariable Integer id) {
         final Category category = categoryService.findCategory(id);

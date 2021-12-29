@@ -24,6 +24,8 @@ public class WorkplaceService {
         this.versionDao = versionDao;
     }
 
+    // --------------------READ--------------------------------------
+
     @Transactional(readOnly = true)
     public Workplace findWorkplace(Integer id) {
         return workplaceDao.find(id);

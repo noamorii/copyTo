@@ -5,6 +5,7 @@ import cz.cvut.kbss.ear.copyto.dao.OrderDao;
 import cz.cvut.kbss.ear.copyto.model.Category;
 import cz.cvut.kbss.ear.copyto.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -37,14 +38,12 @@ public class CategoryService {
         return categoryDao.findByName(name);
     }
 
-    // TODO Admin
     @Transactional
     public void createCategory(Category category){
         Objects.requireNonNull(category);
         categoryDao.persist(category);
     }
 
-    // TODO admin + autor
     @Transactional
     public void addOrder(Category category, Order order){
         Objects.requireNonNull(category);
@@ -53,7 +52,6 @@ public class CategoryService {
         orderDao.update(order);
     }
 
-    // TODO admin + autor
     @Transactional
     public void removeOrder(Category category, Order order){
         Objects.requireNonNull(category);
@@ -64,7 +62,6 @@ public class CategoryService {
         categoryDao.update(category);
     }
 
-    // TODO admin
     @Transactional
     public void updateCategory(Category category, String name) {
         Objects.requireNonNull(category);
@@ -73,7 +70,6 @@ public class CategoryService {
         categoryDao.update(category);
     }
 
-    // TODO admin
     @Transactional
     public void deleteCategory(Category category) {
         Objects.requireNonNull(category);
