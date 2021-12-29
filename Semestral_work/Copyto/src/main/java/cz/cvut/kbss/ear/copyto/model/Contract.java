@@ -62,4 +62,60 @@ public class Contract extends AbstractEntity{
 
     public Contract() {
     }
+
+    public User getClient() {
+        return client;
+    }
+
+    public User getCopywriter() {
+        return copywriter;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public Date getDateOfAgreement() {
+        return dateOfAgreement;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public double getPenalty() {
+        return penalty;
+    }
+
+    public void setClient(User client) {
+        this.client = client;
+    }
+
+    public void setCopywriter(User copywriter) {
+        this.copywriter = copywriter;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public void setDateOfAgreement(Date dateOfAgreement) {
+        this.dateOfAgreement = dateOfAgreement;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setPenalty(double penalty) {
+        this.penalty = penalty;
+    }
 }

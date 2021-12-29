@@ -22,8 +22,16 @@ public class Category extends AbstractEntity {
         return name;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
     public void removeOrder(Order order){

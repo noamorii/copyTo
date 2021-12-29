@@ -41,6 +41,18 @@ public class Conversation extends AbstractEntity{
         return members;
     }
 
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
+    public List<User> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<User> members) {
+        this.members = members;
+    }
+
     public void addMember(User user){
         members.add(user);
     }

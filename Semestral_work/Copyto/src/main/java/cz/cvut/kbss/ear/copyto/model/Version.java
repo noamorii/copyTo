@@ -31,6 +31,22 @@ public class Version extends AbstractEntity{
     @Column(nullable = false)
     private String text;
 
+    public Date getDate() {
+        return date;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }

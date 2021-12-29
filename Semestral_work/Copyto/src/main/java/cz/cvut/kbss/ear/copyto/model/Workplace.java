@@ -40,4 +40,12 @@ public class Workplace extends AbstractEntity{
         if (versions.size() != 0) return versions.get(versions.size()-1);
         return null;
     }
+
+    public List<Version> getVersions() {
+        return versions;
+    }
+
+    public boolean isEditable() {
+        return editable;
+    }
 }

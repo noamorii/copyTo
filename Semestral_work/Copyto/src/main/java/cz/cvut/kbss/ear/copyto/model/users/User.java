@@ -76,6 +76,22 @@ public class User extends AbstractEntity {
         return conversations;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
     public void setMobile(String mobile) {
         this.mobile = mobile;
     }
@@ -114,5 +130,9 @@ public class User extends AbstractEntity {
 
     public void erasePassword(){
         this.password = "";
+    }
+
+    public void setConversations(List<Conversation> conversations) {
+        this.conversations = conversations;
     }
 }

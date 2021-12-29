@@ -28,4 +28,9 @@ public class Copywriter extends User {
         order.addCandidate(this);
     }
 
+    public String getIntro() {
+        return intro;
+    }
+
+
 }

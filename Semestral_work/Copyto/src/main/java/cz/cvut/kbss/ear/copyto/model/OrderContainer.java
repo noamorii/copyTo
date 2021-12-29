@@ -40,6 +40,26 @@ public class OrderContainer extends AbstractEntity{
         return order;
     }
 
+    public User getAssignee() {
+        return assignee;
+    }
+
+    public User getClient() {
+        return client;
+    }
+
+    public Workplace getWorkplace() {
+        return workplace;
+    }
+
+    public List<User> getCandidates() {
+        return candidates;
+    }
+
+    public void setCandidates(List<User> candidates) {
+        this.candidates = candidates;
+    }
+
     public void setAssignee(User assignee) {
         this.assignee = assignee;
     }

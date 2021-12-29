@@ -33,4 +33,27 @@ public class Client extends User {
         orders.add(orderContainer);
     }
 
+    public List<String> getWebs() {
+        return webs;
+    }
+
+    public List<OrderContainer> getOrders() {
+        return orders;
+    }
+
+    public String getResidence() {
+        return residence;
+    }
+
+    public void setWebs(List<String> webs) {
+        this.webs = webs;
+    }
+
+    public void setOrders(List<OrderContainer> orders) {
+        this.orders = orders;
+    }
+
+    public void setResidence(String residence) {
+        this.residence = residence;
+    }
 }

@@ -74,4 +74,32 @@ public class Order extends AbstractEntity{
     public OrderState getState() {
         return state;
     }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setInsertionDate(Date insertionDate) {
+        this.insertionDate = insertionDate;
+    }
+
+    public void setDeadline(Date deadline) {
+        this.deadline = deadline;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public void setState(OrderState state) {
+        this.state = state;
+    }
 }
