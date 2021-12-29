@@ -43,7 +43,7 @@ public class OrderController {
     }
 
     // TODO filter
-    @PutMapping(value = "/id/{id}, consumes = MediaType.APPLICATION_JSON_VALUE")
+    @PutMapping(value = "/id/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateVersion(@PathVariable Integer id, @RequestBody Order order) {
         final Order original = orderService.findOrder(id);

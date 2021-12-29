@@ -46,7 +46,7 @@ public class WorkplaceController {
     }
 
     // TODO filter
-    @PutMapping(value = "/{id}, consumes = MediaType.APPLICATION_JSON_VALUE")
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateWorkplace(@PathVariable Integer id, @RequestBody Workplace workplace) {
         final Workplace original = workplaceService.findWorkplace(id);

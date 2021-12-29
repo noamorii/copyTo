@@ -1,6 +1,8 @@
 package cz.cvut.kbss.ear.copyto.rest;
 
+import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
 import cz.cvut.kbss.ear.copyto.exception.ValidationException;
+import cz.cvut.kbss.ear.copyto.model.Category;
 import cz.cvut.kbss.ear.copyto.model.Version;
 import cz.cvut.kbss.ear.copyto.model.Workplace;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
@@ -37,8 +39,16 @@ public class VersionController {
         return workplaceService.findVersions();
     }
 
+    @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Version getById(@PathVariable Integer id) {
+        final Version version = workplaceService.findVersion(id);
+        if (version == null) {
+            throw NotFoundException.create("Version", id);
+        } return version;
+    }
+
     //TODO
-    @PostMapping(value = "workplace-id/{id}, consumes = MediaType.APPLICATION_JSON_VALUE")
+    @PostMapping(value = "workplace-id/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createVersion(@PathVariable Integer id, @RequestBody Version version) {
         Workplace workplace = workplaceService.findWorkplace(id);
 
@@ -49,7 +59,7 @@ public class VersionController {
     }
 
     // TODO filter
-    @PutMapping(value = "/{id}, consumes = MediaType.APPLICATION_JSON_VALUE")
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateVersion(@PathVariable Integer id, @RequestBody Version version) {
         final Version original = workplaceService.findVersion(id);

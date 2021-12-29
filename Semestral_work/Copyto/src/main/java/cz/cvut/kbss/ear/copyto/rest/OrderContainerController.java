@@ -53,7 +53,7 @@ public class OrderContainerController {
     }
 
     // TODO filter
-    @PutMapping(value = "/{id}, consumes = MediaType.APPLICATION_JSON_VALUE")
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateVersion(@PathVariable Integer id, @RequestBody OrderContainer container) {
         final OrderContainer original = orderService.findContainer(id);
