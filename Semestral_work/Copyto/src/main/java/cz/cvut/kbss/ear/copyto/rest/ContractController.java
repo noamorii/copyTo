@@ -46,7 +46,7 @@ public class ContractController {
     // --------------------READ----------------------------------------
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Contract> getConracts() {
+    public List<Contract> getContracts() {
         return contractService.findContracts();
     }
 
