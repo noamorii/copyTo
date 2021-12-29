@@ -45,7 +45,7 @@ public class CategoryController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/{id}/orders", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/id/{id}/orders", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addOrderToCategory(@PathVariable Integer id, @RequestBody OrderContainer container) {
         final Category category = getById(id);
@@ -61,7 +61,7 @@ public class CategoryController {
         return categoryService.findCategories();
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Category getById(@PathVariable Integer id) {
         final Category category = categoryService.findCategory(id);
         if (category == null) {
@@ -70,7 +70,7 @@ public class CategoryController {
     }
 
 
-    @GetMapping(value = "/{id}/orders", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/id/{id}/orders", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Order> getOrdersByCategory(@PathVariable Integer id) {
         return orderService.findOrders(getById(id));
     }

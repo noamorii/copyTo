@@ -43,13 +43,13 @@ public class OrderController {
     }
 
     // TODO filter
-    @PutMapping(value = "/{id}, consumes = MediaType.APPLICATION_JSON_VALUE")
+    @PutMapping(value = "/id/{id}, consumes = MediaType.APPLICATION_JSON_VALUE")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateVersion(@PathVariable Integer id, @RequestBody Order detail) {
+    public void updateVersion(@PathVariable Integer id, @RequestBody Order order) {
         final Order original = orderService.findOrder(id);
-        if(!original.getId().equals(detail.getId())){
+        if(!original.getId().equals(order.getId())){
             throw new ValidationException("OrderDetail identifier in the data does not match the one in the request URL.");
         }
-        orderService.update(detail);
+        orderService.update(order);
     }
 }

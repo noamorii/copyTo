@@ -17,13 +17,6 @@ import java.util.List;
 })
 public class Order extends AbstractEntity{
 
-    public Order(){}
-    public Order(double price, Date deadlineDate) {
-        this.price = price;
-        this.deadline = deadlineDate;
-        this.insertionDate = new Date();
-    }
-
     @ManyToMany
     @OrderBy("name")
     private List<Category> categories = new ArrayList<>();
@@ -43,6 +36,13 @@ public class Order extends AbstractEntity{
     @Basic(optional = false)
     @Column(nullable = true) //todo ask ondra
     private String link;
+
+    public Order(){}
+    public Order(double price, Date deadlineDate) {
+        this.price = price;
+        this.deadline = deadlineDate;
+        this.insertionDate = new Date();
+    }
 
     // TOTO mapovani enumu
     private OrderState state = OrderState.ADDED;

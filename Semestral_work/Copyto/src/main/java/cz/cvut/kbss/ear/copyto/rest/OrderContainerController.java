@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rest/controllers")
+@RequestMapping("/rest/containers")
 public class OrderContainerController {
 
     private static final Logger LOG = (Logger) LoggerFactory.getLogger(OrderContainerController.class);
@@ -48,7 +48,7 @@ public class OrderContainerController {
     public ResponseEntity<Void> createOrderContainer(@RequestBody OrderContainer container) {
         orderService.createContainer(container);
         LOG.debug("create container {}.", container);
-        final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/ordercontainer{id}", container.getId());
+        final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/id/{id}", container.getId());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
@@ -64,7 +64,7 @@ public class OrderContainerController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeContainer(@PathVariable Integer id){
         final OrderContainer toRemove = orderService.findContainer(id);

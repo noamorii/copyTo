@@ -26,6 +26,11 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public User find(int id) {
+        return dao.find(id);
+    }
+
+    @Transactional(readOnly = true)
     public List<User> findByRole(Role role) {
         return dao.findByRole(role);
     }
