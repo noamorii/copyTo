@@ -4,6 +4,8 @@ import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
 import cz.cvut.kbss.ear.copyto.model.Contract;
 import cz.cvut.kbss.ear.copyto.model.Conversation;
 import cz.cvut.kbss.ear.copyto.model.Message;
+import cz.cvut.kbss.ear.copyto.model.Order;
+import cz.cvut.kbss.ear.copyto.model.users.User;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
 import cz.cvut.kbss.ear.copyto.service.ContractService;
 import cz.cvut.kbss.ear.copyto.service.MessageService;
@@ -65,11 +67,39 @@ public class ContractController {
         } return contract;
     }
 
-    // TODO FIND by
+    @GetMapping(value = "/id-client/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Contract> getByClient(@PathVariable Integer id) {
+        final User user = userService.find(id);
+        final List<Contract> contracts = contractService.findContractsByClient(user);
+        if (contracts == null) {
+            throw NotFoundException.create("contract", id);
+        } return contracts;
+    }
+
+    @GetMapping(value = "/id-copywriter/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Contract> getByCopywrite(@PathVariable Integer id) {
+        final User user = userService.find(id);
+        final List<Contract> contracts = contractService.findContractsByCopywriter(user);
+        if (contracts == null) {
+            throw NotFoundException.create("contract", id);
+        } return contracts;
+    }
+
+    @GetMapping(value = "/id-order/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Contract getByOrder(@PathVariable Integer id) {
+        final Order order = orderService.findOrder(id);
+        final Contract contract = contractService.findContract(order);
+        if (contract == null) {
+            throw NotFoundException.create("contract", id);
+        } return contract;
+    }
+
+
+
 
     // --------------------UPDATE----------------------------------------
 
-    // TODO DELETE , UPDATE BY ADMIN
+    // TODO DELETE , UPDATE BY ADMIN - delat nedelat?
 
     // --------------------DELETE----------------------------------------
 
