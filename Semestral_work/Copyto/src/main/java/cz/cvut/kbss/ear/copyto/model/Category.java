@@ -37,4 +37,8 @@ public class Category extends AbstractEntity {
     public void removeOrder(Order order){
         orders.remove(order);
     }
+
+    public void addOrder(Order order){
+        orders.add(order);
+    }
 }

@@ -4,6 +4,7 @@ import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
 import cz.cvut.kbss.ear.copyto.model.Category;
 import cz.cvut.kbss.ear.copyto.model.Order;
 import cz.cvut.kbss.ear.copyto.model.OrderContainer;
+import cz.cvut.kbss.ear.copyto.model.Version;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
 import cz.cvut.kbss.ear.copyto.service.CategoryService;
 import cz.cvut.kbss.ear.copyto.service.OrderService;
@@ -45,15 +46,6 @@ public class CategoryController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/id/{categoryId}/order/{orderId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void addOrderToCategory(@PathVariable Integer categoryId, @PathVariable Integer orderId) {
-        final Category category = getById(categoryId);
-        final Order order = orderService.findOrder(orderId);
-        categoryService.addOrder(category, order);
-        LOG.debug("Order {} added into category {}.", order, category);
-    }
-
     // --------------------READ--------------------------------------
 
 
@@ -86,6 +78,24 @@ public class CategoryController {
         } return containers;
     }*/
 
+    // --------------------UPDATE--------------------------------------
+
+    @PutMapping(value = "/id/{id}/name/{name}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@PathVariable Integer id, @PathVariable String name) {
+        final Category original = categoryService.findCategory(id);
+        categoryService.updateCategory(original, name);
+    }
+
+    @PutMapping(value = "/id/{categoryId}/order/{orderId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void addOrderToCategory(@PathVariable Integer categoryId, @PathVariable Integer orderId) {
+        final Category category = getById(categoryId);
+        final Order order = orderService.findOrder(orderId);
+        categoryService.addOrder(category, order);
+        LOG.debug("Order {} added into category {}.", order, category);
+    }
+
     // --------------------DELETE--------------------------------------
 
     @DeleteMapping(value = "/id/{categoryId}/orders/id/{orderId}")
@@ -101,7 +111,9 @@ public class CategoryController {
         LOG.debug("Order {} removed from category {}.", order, category);
     }
 
+/*
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+*/
     @DeleteMapping(value = "/id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeCategory(@PathVariable Integer id) {

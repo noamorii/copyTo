@@ -48,6 +48,7 @@ public class CategoryService {
     public void addOrder(Category category, Order order){
         Objects.requireNonNull(category);
         Objects.requireNonNull(order);
+        category.addOrder(order);
         order.setCategory(category);
         orderDao.update(order);
     }
