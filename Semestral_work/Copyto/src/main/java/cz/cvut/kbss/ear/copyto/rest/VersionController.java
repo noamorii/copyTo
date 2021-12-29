@@ -48,7 +48,7 @@ public class VersionController {
     }
 
     //TODO
-    @PostMapping(value = "workplace-id/{id}, consumes = MediaType.APPLICATION_JSON_VALUE")
+    @PostMapping(value = "workplace-id/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createVersion(@PathVariable Integer id, @RequestBody Version version) {
         Workplace workplace = workplaceService.findWorkplace(id);
 

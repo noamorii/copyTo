@@ -7,6 +7,7 @@ import cz.cvut.kbss.ear.copyto.model.Message;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
 import cz.cvut.kbss.ear.copyto.service.ContractService;
 import cz.cvut.kbss.ear.copyto.service.MessageService;
+import cz.cvut.kbss.ear.copyto.service.OrderService;
 import cz.cvut.kbss.ear.copyto.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,20 +27,26 @@ public class ContractController {
     private static final Logger LOG = LoggerFactory.getLogger(ContractController.class);
 
     private final ContractService contractService;
+    private final UserService userService;
+    private final OrderService orderService;
 
     @Autowired
-    public ContractController(ContractService contractService) {
+    public ContractController(ContractService contractService, UserService userService, OrderService orderService) {
         this.contractService = contractService;
-        // TODO probably
+        this.userService = userService;
+        this.orderService = orderService;
     }
 
     // --------------------CREATE--------------------------------------
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createMessage(@RequestBody Contract contract) {
+    @PostMapping(value = "client-id/{clientId}/copywriter-id/{copywriterId}/order-id/{orderId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> createContract(@PathVariable Integer clientId, @PathVariable Integer copywriterId, @PathVariable Integer orderId, @RequestBody Contract contract) {
+        contract.setClient(userService.find(clientId));
+        contract.setCopywriter(userService.find(copywriterId));
+        contract.setOrder(orderService.findOrder(orderId));
         contractService.createContract(contract);
         LOG.debug("Created contract {}.", contract);
-        final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/{id}", contract.getId());
+        final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/id/{id}", contract.getId());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
@@ -50,7 +57,7 @@ public class ContractController {
         return contractService.findContracts();
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Contract getById(@PathVariable Integer id) {
         final Contract contract = contractService.findContract(id);
         if (contract == null) {
