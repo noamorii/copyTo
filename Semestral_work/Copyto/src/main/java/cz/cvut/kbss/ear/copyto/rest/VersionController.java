@@ -38,10 +38,10 @@ public class VersionController {
     }
 
     //TODO
-    @PostMapping(value = "workplace-id/{id}, consumes = MediaType.APPLICATION_JSON_VALUE")
+    @PostMapping(value = "/id/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createVersion(@PathVariable Integer id, @RequestBody Version version) {
+        System.out.println("helepelelfelfeflefef");
         Workplace workplace = workplaceService.findWorkplace(id);
-
         workplaceService.addVersion(version, workplace);
         LOG.debug("created version {}.", version);
         final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/{id}", version.getId());
@@ -49,7 +49,7 @@ public class VersionController {
     }
 
     // TODO filter
-    @PutMapping(value = "/{id}, consumes = MediaType.APPLICATION_JSON_VALUE")
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateVersion(@PathVariable Integer id, @RequestBody Version version) {
         final Version original = workplaceService.findVersion(id);
