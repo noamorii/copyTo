@@ -48,7 +48,7 @@ public class VersionController {
     }
 
     //TODO
-    @PostMapping(value = "workplace-id/{id}, consumes = MediaType.APPLICATION_JSON_VALUE")
+    @PostMapping(value = "workplace-id/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createVersion(@PathVariable Integer id, @RequestBody Version version) {
         Workplace workplace = workplaceService.findWorkplace(id);
 
@@ -59,7 +59,7 @@ public class VersionController {
     }
 
     // TODO filter
-    @PutMapping(value = "/{id}, consumes = MediaType.APPLICATION_JSON_VALUE")
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateVersion(@PathVariable Integer id, @RequestBody Version version) {
         final Version original = workplaceService.findVersion(id);
@@ -69,7 +69,7 @@ public class VersionController {
         workplaceService.update(version);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeVersion(@PathVariable Integer id, @RequestBody Workplace workplace){

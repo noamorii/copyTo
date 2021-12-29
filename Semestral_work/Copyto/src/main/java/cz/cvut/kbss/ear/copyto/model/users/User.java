@@ -3,6 +3,7 @@ package cz.cvut.kbss.ear.copyto.model.users;
 import cz.cvut.kbss.ear.copyto.enums.Role;
 import cz.cvut.kbss.ear.copyto.model.AbstractEntity;
 import cz.cvut.kbss.ear.copyto.model.Conversation;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -67,6 +68,11 @@ public class User extends AbstractEntity {
     public Role getRole() {
         return role;
     }
+
+    public void encodePassword(PasswordEncoder encoder) {
+        this.password = encoder.encode(password);
+    }
+
 
     public void addConversation(Conversation conversation) {
         conversations.add(conversation);
