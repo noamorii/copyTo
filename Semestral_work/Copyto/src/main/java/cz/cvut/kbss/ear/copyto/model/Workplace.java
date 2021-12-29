@@ -37,6 +37,7 @@ public class Workplace extends AbstractEntity{
     }
 
     public Version getLastVersion(){
-        return versions.get(versions.size()-1);
+        if (versions.size() != 0) return versions.get(versions.size()-1);
+        return null;
     }
 }

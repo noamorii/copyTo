@@ -31,15 +31,18 @@ public class VersionController {
         this.workplaceService = workplaceService;
     }
 
-    @PostFilter("hasRole('ADMIN')") // TODO
+    //@PostFilter("hasRole('ADMIN')") // TODO
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Version> getVersions() {
         return workplaceService.findVersions();
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createVersion(@RequestBody Workplace workplace, Version version) {
-        workplaceService.addVersion(workplace, version);
+    //TODO
+    @PostMapping(value = "workplace-id/{id}, consumes = MediaType.APPLICATION_JSON_VALUE")
+    public ResponseEntity<Void> createVersion(@PathVariable Integer id, @RequestBody Version version) {
+        Workplace workplace = workplaceService.findWorkplace(id);
+
+        workplaceService.addVersion(version, workplace);
         LOG.debug("created version {}.", version);
         final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/{id}", version.getId());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);

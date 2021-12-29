@@ -1,6 +1,7 @@
 package cz.cvut.kbss.ear.copyto.rest;
 
 import cz.cvut.kbss.ear.copyto.exception.ValidationException;
+import cz.cvut.kbss.ear.copyto.model.Version;
 import cz.cvut.kbss.ear.copyto.model.Workplace;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
 import cz.cvut.kbss.ear.copyto.service.WorkplaceService;
@@ -13,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/rest/workplace")
@@ -27,7 +30,13 @@ public class WorkplaceController {
         this.workplaceService = workplaceService;
     }
 
-    @PostFilter("hasRole('ROLE_ADMIN')") // TODO
+   // @PostFilter("hasRole('ADMIN')") // TODO
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Workplace> getWorkplace() {
+        return workplaceService.findWorkplaces();
+    }
+
+    //@PostFilter("hasRole('ROLE_ADMIN')") // TODO
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createWorkplace(@RequestBody Workplace workplace) {
         workplaceService.createWorkplace(workplace);

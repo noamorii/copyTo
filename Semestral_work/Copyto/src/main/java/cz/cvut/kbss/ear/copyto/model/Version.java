@@ -11,17 +11,25 @@ import java.util.Date;
 })
 public class Version extends AbstractEntity{
 
+    public Version() {
+    }
+
+    public Version(String title, String text) {
+        this.title = title;
+        this.text = text;
+    }
+
     @Basic(optional = false)
     @Column(nullable = false)
     private Date date = new Date();
 
     @Basic(optional = false)
     @Column(nullable = false)
-    private String title = "";
+    private String title;
 
     @Basic(optional = false)
     @Column(nullable = false)
-    private String text = "";
+    private String text;
 
     public void setTitle(String title) {
         this.title = title;

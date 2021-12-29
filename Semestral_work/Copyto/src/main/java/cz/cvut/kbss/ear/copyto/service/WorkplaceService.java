@@ -66,7 +66,7 @@ public class WorkplaceService {
     }
 
     @Transactional
-    public void addVersion(Workplace workplace, Version version){
+    public void addVersion(Version version, Workplace workplace){
         workplace.addVersion(version);
         versionDao.persist(version);
         workplaceDao.update(workplace);
