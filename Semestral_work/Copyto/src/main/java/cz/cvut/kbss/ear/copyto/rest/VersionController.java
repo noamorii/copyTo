@@ -1,6 +1,8 @@
 package cz.cvut.kbss.ear.copyto.rest;
 
+import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
 import cz.cvut.kbss.ear.copyto.exception.ValidationException;
+import cz.cvut.kbss.ear.copyto.model.Category;
 import cz.cvut.kbss.ear.copyto.model.Version;
 import cz.cvut.kbss.ear.copyto.model.Workplace;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
@@ -35,6 +37,14 @@ public class VersionController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Version> getVersions() {
         return workplaceService.findVersions();
+    }
+
+    @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Version getById(@PathVariable Integer id) {
+        final Version version = workplaceService.findVersion(id);
+        if (version == null) {
+            throw NotFoundException.create("Version", id);
+        } return version;
     }
 
     //TODO
