@@ -57,12 +57,6 @@ public class WorkplaceService {
     }
 
     @Transactional
-    public void changeWorkplaceStatus(Workplace workplace, boolean status){
-        workplace.setEditable(status);
-        workplaceDao.update(workplace);
-    }
-
-    @Transactional
     public void createWorkplace(Workplace workplace){
         workplaceDao.update(workplace);
     }
@@ -117,8 +111,9 @@ public class WorkplaceService {
     }
 
     @Transactional
-    public void Open(Workplace workplace){
-        workplace.setEditable(true);
+    public void changeWorkplaceStatus(Workplace workplace){
+        final boolean val = workplace.isEditable();
+        workplace.setEditable(!val);
         workplaceDao.update(workplace);
     }
 

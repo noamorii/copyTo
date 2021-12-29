@@ -1,5 +1,6 @@
 package cz.cvut.kbss.ear.copyto.rest;
 
+import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
 import cz.cvut.kbss.ear.copyto.exception.ValidationException;
 import cz.cvut.kbss.ear.copyto.model.Version;
 import cz.cvut.kbss.ear.copyto.model.Workplace;
@@ -30,11 +31,7 @@ public class WorkplaceController {
         this.workplaceService = workplaceService;
     }
 
-   // @PostFilter("hasRole('ADMIN')") // TODO
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Workplace> getWorkplace() {
-        return workplaceService.findWorkplaces();
-    }
+    // --------------------CREATE--------------------------------------
 
     //@PostFilter("hasRole('ROLE_ADMIN')") // TODO
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -45,19 +42,42 @@ public class WorkplaceController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    // TODO filter
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateWorkplace(@PathVariable Integer id, @RequestBody Workplace workplace) {
-        final Workplace original = workplaceService.findWorkplace(id);
-        if(!original.getId().equals(workplace.getId())){
-            throw new ValidationException("Workplace identifier in the data does not match the one in the request URL.");
-        }
-        workplaceService.update(workplace);
+    // --------------------READ--------------------------------------
+
+   // @PostFilter("hasRole('ADMIN')") // TODO
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Workplace> getWorkplaces() {
+        return workplaceService.findWorkplaces();
     }
 
+    @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Workplace getById(@PathVariable Integer id) {
+        final Workplace workplace = workplaceService.findWorkplace(id);
+        if (workplace == null) {
+            throw NotFoundException.create("workplace", id);
+        } return workplace;
+    }
+
+
+
+    // --------------------UPDATE--------------------------------------
+
+    // TODO filter
+    @PutMapping(value = "/id-open/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void changeWorkplaceStatus(@PathVariable Integer id) {
+        final Workplace original = workplaceService.findWorkplace(id);
+        /*if(!original.getId().equals(workplace.getId())){
+            throw new ValidationException("Workplace identifier in the data does not match the one in the request URL.");
+        }*/
+        workplaceService.changeWorkplaceStatus(original);
+        workplaceService.update(original);
+    }
+
+    // --------------------DELETE--------------------------------------
+
     //TODO filter
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void resetWorkplace(@PathVariable Integer id){
         final Workplace toReset = workplaceService.findWorkplace(id);

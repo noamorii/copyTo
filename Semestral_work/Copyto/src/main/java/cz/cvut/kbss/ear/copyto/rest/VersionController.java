@@ -95,6 +95,29 @@ public class VersionController {
         workplaceService.update(version);
     }
 
+    // TODO filter + otazka proc to nefunguje s tim equals
+    @PutMapping(value = "/id-clear/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void clearVersion(@PathVariable Integer id) {
+        final Version original = workplaceService.findVersion(id);
+        workplaceService.clear(original);
+        workplaceService.update(original);
+    }
+
+    @PutMapping(value = "/id/{id}/text/{text}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateText(@PathVariable Integer id, @PathVariable String text) {
+        final Version original = workplaceService.findVersion(id);
+        workplaceService.editText(original,text);
+    }
+
+    @PutMapping(value = "/id/{id}/title/{title}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateTitle(@PathVariable Integer id, @PathVariable String title) {
+        final Version original = workplaceService.findVersion(id);
+        workplaceService.editTitle(original,title);
+    }
+
     // --------------------DELETE--------------------------------------
 
     //@PreAuthorize("hasRole('ADMIN')")
