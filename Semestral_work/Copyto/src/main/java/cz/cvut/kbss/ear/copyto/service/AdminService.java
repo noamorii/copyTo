@@ -6,6 +6,7 @@ import cz.cvut.kbss.ear.copyto.enums.Role;
 import cz.cvut.kbss.ear.copyto.model.Category;
 import cz.cvut.kbss.ear.copyto.model.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +18,8 @@ public class AdminService extends UserService {
     CategoryDao categoryDao;
 
     @Autowired
-    public AdminService(UserDao userDao, CategoryDao categoryDao){
-        super(userDao);
+    public AdminService(UserDao userDao, PasswordEncoder passwordEncoder, CategoryDao categoryDao){
+        super(userDao, passwordEncoder);
         this.categoryDao = categoryDao;
     }
 

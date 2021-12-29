@@ -8,6 +8,7 @@ import cz.cvut.kbss.ear.copyto.model.OrderContainer;
 import cz.cvut.kbss.ear.copyto.model.users.Client;
 import cz.cvut.kbss.ear.copyto.model.users.Copywriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +19,8 @@ public class ClientService extends UserService{
     private OrderContainerDao containerDao;
 
     @Autowired
-    public ClientService(UserDao userDao, OrderContainerDao containerDao, OrderDao orderDao){
-        super(userDao);
+    public ClientService(UserDao userDao, PasswordEncoder passwordEncoder, OrderContainerDao containerDao, OrderDao orderDao){
+        super(userDao, passwordEncoder);
         this.orderDao = orderDao;
         this.containerDao = containerDao;
     }
