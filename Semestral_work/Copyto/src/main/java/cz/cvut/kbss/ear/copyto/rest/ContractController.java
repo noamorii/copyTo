@@ -86,12 +86,12 @@ public class ContractController {
     }
 
     @GetMapping(value = "/id-order/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Contract getByOrder(@PathVariable Integer id) {
+    public List<Contract> getByOrder(@PathVariable Integer id) {
         final Order order = orderService.findOrder(id);
-        final Contract contract = contractService.findContract(order);
-        if (contract == null) {
+        final List<Contract> contracts = contractService.findContract(order);
+        if (contracts == null) {
             throw NotFoundException.create("contract", id);
-        } return contract;
+        } return contracts;
     }
 
 

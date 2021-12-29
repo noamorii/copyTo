@@ -31,7 +31,7 @@ public class ContractService {
     }
 
     @Transactional(readOnly = true)
-    public Contract findContract(Order order) {
+    public List<Contract> findContract(Order order) {
         return contractDao.findByOrder(order);
     }
 

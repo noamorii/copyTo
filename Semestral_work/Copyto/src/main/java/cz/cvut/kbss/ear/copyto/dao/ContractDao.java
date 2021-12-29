@@ -28,10 +28,10 @@ public class ContractDao extends BaseDao<Contract> {
                 .getResultList();
     }
 
-    public Contract findByOrder(Order order){
+    public List<Contract> findByOrder(Order order){
         Objects.requireNonNull(order);
         return em.createNamedQuery("Contract.findByOrder", Contract.class).setParameter("order", order)
-                .getSingleResult();
+                .getResultList();
     }
 
     public List<Contract> findAllByDateOfAgreement(Date dateOfAgreement){
