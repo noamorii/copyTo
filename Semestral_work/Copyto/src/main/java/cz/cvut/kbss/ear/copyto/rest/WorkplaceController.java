@@ -31,7 +31,8 @@ public class WorkplaceController {
 
     // --------------------CREATE--------------------------------------
 
-    @PostFilter("hasRole('ROLE_ADMIN')") // TODO
+    // pro testovani - pro fungovani nepotrebne, vytvari se automaticky
+    @PostFilter("hasRole('ROLE_ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createWorkplace(@RequestBody Workplace workplace) {
         workplaceService.createWorkplace(workplace);
@@ -42,12 +43,14 @@ public class WorkplaceController {
 
     // --------------------READ--------------------------------------
 
-    @PostFilter("hasRole('ADMIN')") // TODO
+
+    @PostFilter("hasRole('ADMIN')")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Workplace> getWorkplaces() {
         return workplaceService.findWorkplaces();
     }
 
+    @PostFilter("hasRole('ADMIN')")
     @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Workplace getById(@PathVariable Integer id) {
         final Workplace workplace = workplaceService.findWorkplace(id);
@@ -57,10 +60,9 @@ public class WorkplaceController {
     }
 
 
-
     // --------------------UPDATE--------------------------------------
 
-    // TODO filter
+    // todo vlastnik
     @PutMapping(value = "/id-open/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void changeWorkplaceStatus(@PathVariable Integer id) {
@@ -74,7 +76,7 @@ public class WorkplaceController {
 
     // --------------------DELETE--------------------------------------
 
-    //TODO filter
+    //TODO vlastnik
     @DeleteMapping(value = "/id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void resetWorkplace(@PathVariable Integer id){

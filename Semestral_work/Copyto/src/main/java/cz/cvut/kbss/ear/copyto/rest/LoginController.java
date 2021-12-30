@@ -20,6 +20,7 @@ public class LoginController {
         this.loginService = loginService;
     }
 
+
     @GetMapping("/login")
     public String viewLoginPage() {
         return "login";

@@ -1,7 +1,6 @@
 package cz.cvut.kbss.ear.copyto.rest;
 
 import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
-import cz.cvut.kbss.ear.copyto.model.Category;
 import cz.cvut.kbss.ear.copyto.model.Conversation;
 import cz.cvut.kbss.ear.copyto.model.users.User;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
@@ -14,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +35,7 @@ public class ConversationController {
 
     // --------------------CREATE--------------------------------------
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_CLIENT', 'ROLE_COPYWRITER')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createConversation(@RequestBody Conversation conversation) {
         messageService.createConversation(conversation);
@@ -45,11 +46,13 @@ public class ConversationController {
 
     // --------------------READ--------------------------------------
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Conversation> getConversation() {
         return messageService.findConversations();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Conversation getById(@PathVariable Integer id) {
         final Conversation conversation = messageService.findConversation(id);
@@ -58,6 +61,7 @@ public class ConversationController {
         } return conversation;
     }
 
+    // TODO opravneny user
     @GetMapping(value = "/id-user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Conversation> getByUser(@PathVariable Integer id) {
         final User user = userService.find(id);
@@ -66,6 +70,4 @@ public class ConversationController {
             throw NotFoundException.create("Conversation", id);
         } return conversations;
     }
-
-
 }

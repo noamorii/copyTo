@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class MessageController {
 
     // --------------------CREATE--------------------------------------
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_CLIENT', 'ROLE_COPYWRITER')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createMessage(@RequestBody Message message) {
         messageService.createMessage(message);
@@ -44,8 +46,7 @@ public class MessageController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    // TODO otestuj
-
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_CLIENT', 'ROLE_COPYWRITER')")
     @PostMapping(value = "author-id/{authorId}/ receiver-id/{receiverId}/text/{text}",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> sendMessage(@PathVariable Integer authorId, @PathVariable Integer receiverId, @PathVariable String text) {
         Message message = new Message();
@@ -58,6 +59,7 @@ public class MessageController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_CLIENT', 'ROLE_COPYWRITER')")
     @PostMapping(value = "author-id/{authorId}/text/{text}/group-message",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> sendGroupMessage(@RequestBody ArrayList<Integer> userIds, @PathVariable Integer authorId, @PathVariable String text) {
         User author = userService.find(authorId);
@@ -73,11 +75,13 @@ public class MessageController {
 
     // --------------------READ--------------------------------------
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Message> getMessage() {
         return messageService.findMessages();
     }
 
+    // TODO opravneni useri
     @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Message getById(@PathVariable Integer id) {
         final Message message = messageService.findMessage(id);
@@ -86,6 +90,7 @@ public class MessageController {
         } return message;
     }
 
+    // TODO opravneni useri
     @GetMapping(value = "/id-conversation/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Message> getByConversation(@PathVariable Integer id) {
         final Conversation conversation = messageService.findConversation(id);
@@ -96,6 +101,7 @@ public class MessageController {
         return messages;
     }
 
+    // TODO opravneni ueri
     @GetMapping(value = "/id-author/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Message> getByAuthor(@PathVariable Integer id) {
         final User user = userService.find(id);
@@ -105,6 +111,7 @@ public class MessageController {
         } return message;
     }
 
+    // TODO opravneni useri
     @GetMapping(value = "/id-receiver/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Message> getByReceiver(@PathVariable Integer id) {
         final User user = userService.find(id);

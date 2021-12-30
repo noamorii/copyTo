@@ -46,18 +46,20 @@ public class UserController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_GUEST')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT,', 'ROLE_COPYWRITER', 'ROLE_USER', 'ROLE_GUEST')")
     @GetMapping(value = "/current", produces = MediaType.APPLICATION_JSON_VALUE)
     public User getCurrent(Principal principal) {
         final AuthenticationToken auth = (AuthenticationToken) principal;
         return auth.getPrincipal().getUser();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<User> getUsers() {
         return userService.find();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public User getById(@PathVariable Integer id) {
         final User user = userService.find(id);
@@ -66,6 +68,7 @@ public class UserController {
         } return user;
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT,', 'ROLE_COPYWRITER', 'ROLE_USER')")
     @GetMapping(value = "/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     public User getByEmail(@PathVariable String email) {
         final User user = userService.findByEmail(email);
@@ -74,6 +77,7 @@ public class UserController {
         } return user;
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT,', 'ROLE_COPYWRITER', 'ROLE_USER', 'ROLE_GUEST')")
     @GetMapping(value = "/name/{name}/surname/{surname}", produces = MediaType.APPLICATION_JSON_VALUE)
     public User getByName(@PathVariable String name, @PathVariable String surname) {
         final User user = userService.findByName(name, surname);
@@ -82,6 +86,7 @@ public class UserController {
         } return user;
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT,', 'ROLE_COPYWRITER', 'ROLE_USER', 'ROLE_GUEST')")
     @GetMapping(value = "/role/{role}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<User> getByRole(@PathVariable Role role) {
         final List<User> user = userService.findByRole(role);

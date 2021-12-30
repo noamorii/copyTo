@@ -32,7 +32,7 @@ public class OrderContainerController {
         this.orderService = workplaceService;
     }
 
-    // TODO filter
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createOrderContainer(@RequestBody OrderContainer container) {
         orderService.createContainer(container);
@@ -43,17 +43,20 @@ public class OrderContainerController {
 
     // ---------------------------------------------------------
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public List<OrderContainer> getAllContainers() {
         return orderService.findContainers();
     }
 
+    // TODO OPRAVNENY USER
     @GetMapping(value="/id/{id}/candidates", produces = MediaType.APPLICATION_JSON_VALUE)
     List<User> getCandidates(@PathVariable Integer id) {
         OrderContainer container = orderService.findContainer(id);
         return orderService.findCandidates(container);
     }
 
+    @PreAuthorize("hasRole('ROLE_COPYWRITER')") // TODO + ADMIN + VLASTNIK
     @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Order getById(@PathVariable Integer id) {
         final Order order = orderService.findOrder(id);
@@ -64,7 +67,7 @@ public class OrderContainerController {
 
     // ---------------------------------------------------------
 
-    // TODO filter
+    // TODO opravneny copywriter
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateVersion(@PathVariable Integer id, @RequestBody OrderContainer container) {
@@ -77,7 +80,7 @@ public class OrderContainerController {
 
     // ---------------------------------------------------------
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')") // + opravneny vlastnik
     @DeleteMapping(value = "/id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeContainer(@PathVariable Integer id){

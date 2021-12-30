@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,6 +39,7 @@ public class ContractController {
 
     // --------------------CREATE--------------------------------------
 
+    // TODO opravneny client
     @PostMapping(value = "client-id/{clientId}/copywriter-id/{copywriterId}/order-id/{orderId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createContract(@PathVariable Integer clientId, @PathVariable Integer copywriterId, @PathVariable Integer orderId, @RequestBody Contract contract) {
         contract.setClient(userService.find(clientId));
@@ -51,11 +53,13 @@ public class ContractController {
 
     // --------------------READ----------------------------------------
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Contract> getContracts() {
         return contractService.findContracts();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Contract getById(@PathVariable Integer id) {
         final Contract contract = contractService.findContract(id);
@@ -64,6 +68,7 @@ public class ContractController {
         } return contract;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')") // todo + opravneny client
     @GetMapping(value = "/id-client/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Contract> getByClient(@PathVariable Integer id) {
         final User user = userService.find(id);
@@ -73,6 +78,7 @@ public class ContractController {
         } return contracts;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')") // todo + opravneny copywriter
     @GetMapping(value = "/id-copywriter/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Contract> getByCopywrite(@PathVariable Integer id) {
         final User user = userService.find(id);
@@ -82,6 +88,7 @@ public class ContractController {
         } return contracts;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')") // todo + opravneny client + opravneny copywriter
     @GetMapping(value = "/id-order/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Contract> getByOrder(@PathVariable Integer id) {
         final Order order = orderService.findOrder(id);

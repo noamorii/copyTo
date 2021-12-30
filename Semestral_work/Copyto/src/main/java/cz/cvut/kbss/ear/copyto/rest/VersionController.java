@@ -1,8 +1,6 @@
 package cz.cvut.kbss.ear.copyto.rest;
 
 import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
-import cz.cvut.kbss.ear.copyto.exception.ValidationException;
-import cz.cvut.kbss.ear.copyto.model.Category;
 import cz.cvut.kbss.ear.copyto.model.Version;
 import cz.cvut.kbss.ear.copyto.model.Workplace;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
@@ -14,11 +12,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -36,7 +32,7 @@ public class VersionController {
 
     // --------------------CREATE--------------------------------------
 
-    //TODO
+    //TODO opravneny copywriter + vlastnik
     @PostMapping(value = "workplace-id/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createVersion(@PathVariable Integer id, @RequestBody Version version) {
         Workplace workplace = workplaceService.findWorkplace(id);
@@ -49,6 +45,7 @@ public class VersionController {
 
     // --------------------READ--------------------------------------
 
+    //TODO opravneny copywriter + vlastnik
     @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Version getById(@PathVariable Integer id) {
         final Version version = workplaceService.findVersion(id);
@@ -57,21 +54,13 @@ public class VersionController {
         } return version;
     }
 
-    //@PostFilter("hasRole('ADMIN')") // TODO
+    // TODO vlastnik, povereny copywriter + admin
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Version> getVersions() {
         return workplaceService.findVersions();
     }
 
-    // TODO correct format pro date?
-    /*@GetMapping(value = "/date/{date}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Version> getByDate(@PathVariable Date date) {
-        final List<Version> versions = workplaceService.findVersion(date);
-        if (versions == null) {
-            throw NotFoundException.create("Version", date);
-        } return versions;
-    }*/
-
+    // TODO vlastnik, povereny copywriter + admin
     @GetMapping(value = "/title/{title}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Version> getByTitle(@PathVariable String title) {
         final List<Version> versions = workplaceService.findVersion(title);
@@ -82,12 +71,12 @@ public class VersionController {
 
     // --------------------UPDATE--------------------------------------
 
-    // TODO filter + otazka proc to nefunguje s tim equals
+    // copywriter + vlastnik
     @PutMapping(value = "/id/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateVersion(@PathVariable Integer id, @RequestBody Version version) {
         final Version original = workplaceService.findVersion(id);
-/*        if(!original.getId().equals(version.getId())){
+/*        if(!original.getId().equals(version.getId())){ // todo zitra checkni
             throw new ValidationException("Version identifier in the data does not match the one in the request URL.");
         }*/
         original.setTitle(version.getTitle());
@@ -95,7 +84,7 @@ public class VersionController {
         workplaceService.update(version);
     }
 
-    // TODO filter + otazka proc to nefunguje s tim equals
+    // todo vlastnik + copywriter
     @PutMapping(value = "/id-clear/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void clearVersion(@PathVariable Integer id) {
@@ -104,6 +93,7 @@ public class VersionController {
         workplaceService.update(original);
     }
 
+    // todo vlastnik + copywriter
     @PutMapping(value = "/id/{id}/text/{text}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateText(@PathVariable Integer id, @PathVariable String text) {
@@ -111,6 +101,7 @@ public class VersionController {
         workplaceService.editText(original,text);
     }
 
+    // todo vlastnik + copywriter
     @PutMapping(value = "/id/{id}/title/{title}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateTitle(@PathVariable Integer id, @PathVariable String title) {
@@ -120,7 +111,7 @@ public class VersionController {
 
     // --------------------DELETE--------------------------------------
 
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')") // + todo vlastnik, copywriter
     @DeleteMapping(value = "/id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeVersion(@PathVariable Integer id){

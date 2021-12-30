@@ -29,6 +29,7 @@ public class ClientController {
         this.orderService = orderService;
     }
 
+    // TODO opravneny client
     @PutMapping(value = "/id-assignee/{assiggneId}/id-container/{orderId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void authorizeAssignee(@PathVariable Integer assiggneId, @PathVariable Integer orderId) {
@@ -37,6 +38,7 @@ public class ClientController {
         clientService.authorizeAssignee(container, copywriter);
     }
 
+    // TODO opravneny client
     @PutMapping(value = "/change/id-assignee/{assiggneId}/id-container/{orderId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void changeAssignee(@PathVariable Integer assiggneId, @PathVariable Integer orderId) {
@@ -45,6 +47,7 @@ public class ClientController {
         clientService.changeAssignee(container, copywriter);
     }
 
+    // TODO opravneny client
     @PutMapping(value = "/visibility/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void changeAssignee(@PathVariable Integer id) {

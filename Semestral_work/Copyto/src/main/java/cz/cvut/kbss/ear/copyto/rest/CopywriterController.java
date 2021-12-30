@@ -29,6 +29,7 @@ public class CopywriterController {
         this.orderService = orderService;
     }
 
+    // TODO opravneny copywriter
     @PutMapping(value = "/id-container/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void authorizeAssignee(@PathVariable Integer id) {
@@ -36,6 +37,7 @@ public class CopywriterController {
         copywriterService.finishJob(container);
     }
 
+    // TODO opravneny copywriter
     @PutMapping(value = "/user/{userId}/order/{orderId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void signUpForOrder(@PathVariable Integer orderId, @PathVariable Integer userId) {

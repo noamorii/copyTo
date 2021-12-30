@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,16 +31,19 @@ public class OrderController {
         this.orderService = workplaceService;
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COPYWRITER')")
     @GetMapping
-    List<Order> getAllOrderDetails() {
+    List<Order> getAllOrder() {
         return orderService.findOrders();
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COPYWRITER')")
     @GetMapping(value="/available", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Order> getAvailableOrders() {
         return orderService.findAvailableOrders();
     }
 
+    // todo vlastnik, admin
     @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public OrderContainer getById(@PathVariable Integer id) {
         final OrderContainer container = orderService.findContainer(id);
@@ -48,7 +52,7 @@ public class OrderController {
         } return container;
     }
 
-    // TODO filter
+    @PreAuthorize("hasAnyRole('ROLE_CLIENT')") // OPRAVNENY
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createOrder(@RequestBody Order order) {
         orderService.addOrder(order);
@@ -57,7 +61,7 @@ public class OrderController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    // TODO filter
+    // TODO OPRAVNENY COPYWRITER
     @PutMapping(value = "/id/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateVersion(@PathVariable Integer id, @RequestBody Order order) {

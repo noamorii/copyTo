@@ -36,6 +36,7 @@ public class CategoryController {
 
     // --------------------CREATE--------------------------------------
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createCategory(@RequestBody Category category) {
         categoryService.createCategory(category);
@@ -46,13 +47,14 @@ public class CategoryController {
 
     // --------------------READ--------------------------------------
 
-    //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_GUEST', 'ROLE_CLIENT', 'ROLE_COPYWRITER', 'ADMIN', 'USER', 'GUEST', 'CLIENT', 'COPYWRITER', 'ROLE_0', 'ROLE_1', 'ROLE_2', 'ROLE_3', 'ROLE_4', 0, 1, 2, 3, 4)")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_CLIENT', 'ROLE_COPYWRITER')")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Category> getCategories() {
         return categoryService.findCategories();
     }
 
+
+    // TODO admin, copywriteri a ten jedinec
     @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Category getById(@PathVariable Integer id) {
         final Category category = categoryService.findCategory(id);
@@ -61,6 +63,7 @@ public class CategoryController {
         } return category;
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COPYWRITER')")
     @GetMapping(value = "/id/{id}/orders", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Order> getOrdersByCategory(@PathVariable Integer id) {
         return orderService.findOrders(getById(id));
@@ -68,6 +71,7 @@ public class CategoryController {
 
     // --------------------UPDATE--------------------------------------
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(value = "/id/{id}/name/{name}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@PathVariable Integer id, @PathVariable String name) {
@@ -75,6 +79,7 @@ public class CategoryController {
         categoryService.updateCategory(original, name);
     }
 
+    // TODO client kterymu patri dany order
     @PutMapping(value = "/id/{categoryId}/order/{orderId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addOrderToCategory(@PathVariable Integer categoryId, @PathVariable Integer orderId) {
@@ -86,6 +91,7 @@ public class CategoryController {
 
     // --------------------DELETE--------------------------------------
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')") // todo + ten typek, kterej to vlastni
     @DeleteMapping(value = "/id/{categoryId}/orders/id/{orderId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeOrderFromCategory(@PathVariable Integer categoryId,
