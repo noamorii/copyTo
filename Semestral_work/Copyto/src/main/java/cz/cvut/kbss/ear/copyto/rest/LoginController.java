@@ -4,15 +4,9 @@ import cz.cvut.kbss.ear.copyto.service.LoginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.HashMap;
 
 @Controller
 @RequestMapping("/auth")
@@ -26,11 +20,17 @@ public class LoginController {
         this.loginService = loginService;
     }
 
-    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> loginUser(@RequestBody HashMap<String, String> request) throws Exception {
-        loginService.loginUser(request.get("email"), request.get("password"));
-        LOG.trace("User {} successfully logged in", request.get("email"));
-        return new ResponseEntity<>(null, HttpStatus.OK);
+    @GetMapping("/login")
+    public String viewLoginPage() {
+        return "login";
     }
+
+//    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public String loginUser(@RequestBody HashMap<String, String> request) throws Exception {
+//        System.out.println("aaaaaaaaaaaaaaaaaaaaaa");
+//        loginService.loginUser(request.get("email"), request.get("password"));
+//        LOG.trace("User {} successfully logged in", request.get("email"));
+//        return "index";
+//    }
 }
 
