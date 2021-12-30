@@ -3,8 +3,6 @@ package cz.cvut.kbss.ear.copyto.rest;
 import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
 import cz.cvut.kbss.ear.copyto.model.Category;
 import cz.cvut.kbss.ear.copyto.model.Order;
-import cz.cvut.kbss.ear.copyto.model.OrderContainer;
-import cz.cvut.kbss.ear.copyto.model.Version;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
 import cz.cvut.kbss.ear.copyto.service.CategoryService;
 import cz.cvut.kbss.ear.copyto.service.OrderService;
@@ -49,7 +47,8 @@ public class CategoryController {
 
     // --------------------READ--------------------------------------
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_GUEST', 'ROLE_CLIENT', 'ROLE_COPYWRITER', 'ADMIN', 'USER', 'GUEST', 'CLIENT', 'COPYWRITER', '0', '1', '2', '3', '4', 0, 1, 2, 3, 4)")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_GUEST', 'ROLE_CLIENT', 'ROLE_COPYWRITER', 'ADMIN', 'USER', 'GUEST', 'CLIENT', 'COPYWRITER', 'ROLE_0', 'ROLE_1', 'ROLE_2', 'ROLE_3', 'ROLE_4', 0, 1, 2, 3, 4)")
+    //@PreAuthorize("permitAll()")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Category> getCategories() {
         System.out.println("aaaaaaaa");
