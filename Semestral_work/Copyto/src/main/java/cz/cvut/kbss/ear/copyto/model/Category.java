@@ -12,6 +12,7 @@ import java.util.List;
 public class Category extends AbstractEntity {
 
     @ManyToMany(mappedBy = "categories")
+    @OrderBy("insertionDate")
     private List<Order> orders = new ArrayList<>();
 
     @Basic(optional = false)

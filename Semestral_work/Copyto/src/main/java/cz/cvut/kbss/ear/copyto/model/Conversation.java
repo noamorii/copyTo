@@ -24,9 +24,11 @@ public class Conversation extends AbstractEntity{
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     @JoinColumn(name = "converstaionId")
+    @OrderBy("date")
     private List<Message> messages = new ArrayList<>();
 
     @ManyToMany
+    @OrderBy("surname")
     private List<User> members = new ArrayList<>();
 
     public Conversation() {

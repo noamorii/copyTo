@@ -14,6 +14,7 @@ public class Workplace extends AbstractEntity{
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     @JoinColumn(name = "workplaceId")
+    @OrderBy("date")
     List<Version> versions = new ArrayList<>();
 
     @Basic(optional = false)

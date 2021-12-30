@@ -30,6 +30,7 @@ public class OrderContainer extends AbstractEntity{
     private Workplace workplace = new Workplace();
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
+    @OrderBy("email")
     private List<User> candidates = new ArrayList<>();
 
     @Basic(optional = false)
