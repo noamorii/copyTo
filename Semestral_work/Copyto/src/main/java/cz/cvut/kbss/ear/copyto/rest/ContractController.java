@@ -2,13 +2,10 @@ package cz.cvut.kbss.ear.copyto.rest;
 
 import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
 import cz.cvut.kbss.ear.copyto.model.Contract;
-import cz.cvut.kbss.ear.copyto.model.Conversation;
-import cz.cvut.kbss.ear.copyto.model.Message;
 import cz.cvut.kbss.ear.copyto.model.Order;
 import cz.cvut.kbss.ear.copyto.model.users.User;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
 import cz.cvut.kbss.ear.copyto.service.ContractService;
-import cz.cvut.kbss.ear.copyto.service.MessageService;
 import cz.cvut.kbss.ear.copyto.service.OrderService;
 import cz.cvut.kbss.ear.copyto.service.UserService;
 import org.slf4j.Logger;
@@ -93,14 +90,4 @@ public class ContractController {
             throw NotFoundException.create("contract", id);
         } return contracts;
     }
-
-
-
-
-    // --------------------UPDATE----------------------------------------
-
-    // TODO DELETE , UPDATE BY ADMIN - delat nedelat?
-
-    // --------------------DELETE----------------------------------------
-
 }

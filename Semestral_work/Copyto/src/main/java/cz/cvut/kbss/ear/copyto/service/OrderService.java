@@ -3,7 +3,6 @@ package cz.cvut.kbss.ear.copyto.service;
 import cz.cvut.kbss.ear.copyto.dao.OrderContainerDao;
 import cz.cvut.kbss.ear.copyto.dao.OrderDao;
 import cz.cvut.kbss.ear.copyto.enums.OrderState;
-import cz.cvut.kbss.ear.copyto.enums.Role;
 import cz.cvut.kbss.ear.copyto.model.Category;
 import cz.cvut.kbss.ear.copyto.model.Order;
 import cz.cvut.kbss.ear.copyto.model.OrderContainer;
@@ -154,8 +153,6 @@ public class OrderService {
         return containerDao.findAllCandidates();
     }
 
-
-
     @Transactional
     public void createContainer(OrderContainer container) {
         containerDao.persist(container);
@@ -180,32 +177,5 @@ public class OrderService {
     public void remove(OrderContainer container) {
         Objects.requireNonNull(container);
         containerDao.remove(container);
-    }
-
-    @Transactional
-    public void addAssignee(OrderContainer container, User assignee){
-        container.setAssignee(assignee);
-        containerDao.update(container);
-    }
-
-    @Transactional
-    public void changeAssignee(OrderContainer order, User assignee){
-        order.setAssignee(assignee);
-        containerDao.update(order);
-    }
-
-    @Transactional
-    public void signUpForOrder(User candidate, Order order){
-        if(candidate.getRole() == Role.COPYWRITER){
-            OrderContainer container = containerDao.findByDetail(order);
-            container.addCandidate(candidate);
-            containerDao.update(container);
-        }
-    }
-
-    @Transactional
-    public void changeVisibility(OrderContainer container){
-        container.setOpen(!container.isOpen());
-        containerDao.update(container);
     }
 }

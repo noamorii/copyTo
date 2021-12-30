@@ -41,7 +41,7 @@ public class CategoryController {
     public ResponseEntity<Void> createCategory(@RequestBody Category category) {
         categoryService.createCategory(category);
         LOG.debug("Created category {}.", category);
-        final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/{id}", category.getId());
+        final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/id/{id}", category.getId());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
@@ -62,21 +62,10 @@ public class CategoryController {
         } return category;
     }
 
-
     @GetMapping(value = "/id/{id}/orders", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Order> getOrdersByCategory(@PathVariable Integer id) {
         return orderService.findOrders(getById(id));
     }
-
-
-    // TODO tohle se mi nezda
-/*    @GetMapping(value = "/{id}/orders", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<OrderContainer> getOrdersContainersByCategory(@PathVariable Integer id) {
-        List<OrderContainer> containers = new ArrayList<>();
-        for (Order detail : orderService.findOrders(getById(id))) {
-            containers.add(orderService.findContainer(detail));
-        } return containers;
-    }*/
 
     // --------------------UPDATE--------------------------------------
 
@@ -111,9 +100,7 @@ public class CategoryController {
         LOG.debug("Order {} removed from category {}.", order, category);
     }
 
-/*
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-*/
     @DeleteMapping(value = "/id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeCategory(@PathVariable Integer id) {

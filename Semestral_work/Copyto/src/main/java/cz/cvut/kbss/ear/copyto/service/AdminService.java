@@ -25,7 +25,8 @@ public class AdminService extends UserService {
 
     // TODO admin
     @Transactional
-    public void deleteCategory(Category category) {
+    public void deleteCategory(Integer id) {
+        Category category = categoryDao.find(id);
         Objects.requireNonNull(category);
         categoryDao.remove(category);
     }
@@ -39,24 +40,28 @@ public class AdminService extends UserService {
 
     //TODO Admin
     @Transactional
-    public void deleteUser(User user) {
-        dao.remove(user);
+    public void deleteUser(Integer id) {
+        User toRemove = dao.find(id);
+        dao.remove(toRemove);
     }
 
     @Transactional
-    public void blockUser(User toBlock){
+    public void blockUser(Integer id){
+        User toBlock = dao.find(id);
         toBlock.setRole(Role.USER);
         dao.update(toBlock);
     }
 
     @Transactional
-    public void unblockClient(User toUnblock){
+    public void unblockClient(Integer id){
+        User toUnblock = dao.find(id);
         toUnblock.setRole(Role.CLIENT);
         dao.update(toUnblock);
     }
 
     @Transactional
-    public void unblockCopywriter(User toUnblock){
+    public void unblockCopywriter(Integer id){
+        User toUnblock = dao.find(id);
         toUnblock.setRole(Role.COPYWRITER);
         dao.update(toUnblock);
     }
