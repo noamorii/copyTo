@@ -3,6 +3,7 @@ package cz.cvut.kbss.ear.copyto.rest;
 import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
 import cz.cvut.kbss.ear.copyto.model.Category;
 import cz.cvut.kbss.ear.copyto.model.Conversation;
+import cz.cvut.kbss.ear.copyto.model.users.User;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
 import cz.cvut.kbss.ear.copyto.service.MessageService;
 import cz.cvut.kbss.ear.copyto.service.UserService;
@@ -49,7 +50,7 @@ public class ConversationController {
         return messageService.findConversations();
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Conversation getById(@PathVariable Integer id) {
         final Conversation conversation = messageService.findConversation(id);
         if (conversation == null) {
@@ -57,5 +58,14 @@ public class ConversationController {
         } return conversation;
     }
 
-    // TODO by user
+    @GetMapping(value = "/id-user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Conversation> getByUser(@PathVariable Integer id) {
+        final User user = userService.find(id);
+        final List<Conversation> conversations = messageService.findConversations(user);
+        if (conversations == null) {
+            throw NotFoundException.create("Conversation", id);
+        } return conversations;
+    }
+
+
 }

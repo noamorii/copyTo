@@ -3,6 +3,7 @@ package cz.cvut.kbss.ear.copyto.rest;
 import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
 import cz.cvut.kbss.ear.copyto.model.Conversation;
 import cz.cvut.kbss.ear.copyto.model.Message;
+import cz.cvut.kbss.ear.copyto.model.users.User;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
 import cz.cvut.kbss.ear.copyto.service.MessageService;
 import cz.cvut.kbss.ear.copyto.service.UserService;
@@ -49,7 +50,7 @@ public class MessageController {
         return messageService.findMessages();
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Message getById(@PathVariable Integer id) {
         final Message message = messageService.findMessage(id);
         if (message == null) {
@@ -57,8 +58,32 @@ public class MessageController {
         } return message;
     }
 
-    // TODO by reciever
+    @GetMapping(value = "/id-conversation/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Message> getByConversation(@PathVariable Integer id) {
+        final Conversation conversation = messageService.findConversation(id);
+        final List<Message> messages = messageService.findAllMessagesInConversation(conversation);
+        if(conversation == null){
+            throw NotFoundException.create("Conversation", id);
+        }
+        return messages;
+    }
 
-    // TODO by sender
+    @GetMapping(value = "/id-author/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Message> getByAuthor(@PathVariable Integer id) {
+        final User user = userService.find(id);
+        final List<Message> message = messageService.findMessagesByAuthor(user);
+        if (message == null) {
+            throw NotFoundException.create("Author", id);
+        } return message;
+    }
+
+    @GetMapping(value = "/id-receiver/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Message> getByReceiver(@PathVariable Integer id) {
+        final User user = userService.find(id);
+        final List<Message> message = messageService.findMessagesByReceiver(user);
+        if (message == null) {
+            throw NotFoundException.create("Receiver", id);
+        } return message;
+    }
 
 }
