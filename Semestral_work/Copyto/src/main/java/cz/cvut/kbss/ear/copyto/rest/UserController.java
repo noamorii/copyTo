@@ -1,5 +1,6 @@
 package cz.cvut.kbss.ear.copyto.rest;
 
+import cz.cvut.kbss.ear.copyto.enums.Role;
 import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
 import cz.cvut.kbss.ear.copyto.model.users.User;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
@@ -72,4 +73,21 @@ public class UserController {
             throw NotFoundException.create("User", email);
         } return user;
     }
+
+    @GetMapping(value = "/name/{name}/surname/{surname}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public User getByName(@PathVariable String name, @PathVariable String surname) {
+        final User user = userService.findByName(name, surname);
+        if (user == null) {
+            throw NotFoundException.create("User", name + surname);
+        } return user;
+    }
+
+    @GetMapping(value = "/role/{role}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<User> getByRole(@PathVariable Role role) {
+        final List<User> user = userService.findByRole(role);
+        if (user == null) {
+            throw NotFoundException.create("User", role);
+        } return user;
+    }
+
 }

@@ -1,7 +1,9 @@
 package cz.cvut.kbss.ear.copyto.rest;
 
+import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
 import cz.cvut.kbss.ear.copyto.exception.ValidationException;
 import cz.cvut.kbss.ear.copyto.model.Order;
+import cz.cvut.kbss.ear.copyto.model.OrderContainer;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
 import cz.cvut.kbss.ear.copyto.service.OrderService;
 import org.slf4j.Logger;
@@ -31,6 +33,19 @@ public class OrderController {
     @GetMapping
     List<Order> getAllOrderDetails() {
         return orderService.findOrders();
+    }
+
+    @GetMapping(value="/available", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Order> getAvailableOrders() {
+        return orderService.findAvailableOrders();
+    }
+
+    @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public OrderContainer getById(@PathVariable Integer id) {
+        final OrderContainer container = orderService.findContainer(id);
+        if (container == null) {
+            throw NotFoundException.create("container", id);
+        } return container;
     }
 
     // TODO filter
