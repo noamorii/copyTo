@@ -23,6 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest/categories")
+@PreAuthorize("permitAll()")
 public class CategoryController {
 
     private static final Logger LOG = LoggerFactory.getLogger(CategoryController.class);
@@ -48,9 +49,10 @@ public class CategoryController {
 
     // --------------------READ--------------------------------------
 
-
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_GUEST', 'ROLE_CLIENT', 'ROLE_COPYWRITER', 'ADMIN', 'USER', 'GUEST', 'CLIENT', 'COPYWRITER', '0', '1', '2', '3', '4', 0, 1, 2, 3, 4)")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Category> getCategories() {
+        System.out.println("aaaaaaaa");
         return categoryService.findCategories();
     }
 
