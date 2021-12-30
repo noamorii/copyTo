@@ -8,7 +8,7 @@ public class TestController {
 
     @RequestMapping("/welcome")
     public String welcomepage() {
-        return "Welcome";
+        return "index";
     }
 
 }
