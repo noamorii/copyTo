@@ -3,10 +3,9 @@ package cz.cvut.kbss.ear.copyto.service;
 import cz.cvut.kbss.ear.copyto.dao.OrderContainerDao;
 import cz.cvut.kbss.ear.copyto.dao.OrderDao;
 import cz.cvut.kbss.ear.copyto.dao.UserDao;
-import cz.cvut.kbss.ear.copyto.model.Order;
+import cz.cvut.kbss.ear.copyto.enums.OrderState;
 import cz.cvut.kbss.ear.copyto.model.OrderContainer;
-import cz.cvut.kbss.ear.copyto.model.users.Client;
-import cz.cvut.kbss.ear.copyto.model.users.Copywriter;
+import cz.cvut.kbss.ear.copyto.model.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,28 +24,22 @@ public class ClientService extends UserService{
         this.containerDao = containerDao;
     }
 
-    //TODO
     @Transactional
-    public void createOrder(Client client) {
-        if (exists(client.getEmail())) {
-            OrderContainer container = new OrderContainer();
-            container.setClient(client);
-            client.addOrder(container);
-            dao.update(client);
-            containerDao.update(container);
-        }
-    }
-
-    @Transactional
-    public void addOrderNote(OrderContainer container, Order order){
-        container.setOrder(order);
-        orderDao.persist(order);
+    public void authorizeAssignee(OrderContainer container, User assignee){
+        container.setAssignee(assignee);
+        container.getOrder().setState(OrderState.IN_PROCESS);
         containerDao.update(container);
     }
 
     @Transactional
-    public void authorizeAssignee(OrderContainer container, Copywriter assignee){
-        container.setAssignee(assignee);
+    public void changeAssignee(OrderContainer order, User assignee){
+        order.setAssignee(assignee);
+        containerDao.update(order);
+    }
+
+    @Transactional
+    public void changeVisibility(OrderContainer container){
+        container.setOpen(!container.isOpen());
         containerDao.update(container);
     }
 }
