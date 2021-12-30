@@ -2,11 +2,11 @@ package cz.cvut.kbss.ear.copyto.service;
 
 import cz.cvut.kbss.ear.copyto.dao.OrderContainerDao;
 import cz.cvut.kbss.ear.copyto.dao.OrderDao;
+import cz.cvut.kbss.ear.copyto.enums.OrderState;
 import cz.cvut.kbss.ear.copyto.enums.Role;
 import cz.cvut.kbss.ear.copyto.model.Category;
 import cz.cvut.kbss.ear.copyto.model.Order;
 import cz.cvut.kbss.ear.copyto.model.OrderContainer;
-import cz.cvut.kbss.ear.copyto.enums.OrderState;
 import cz.cvut.kbss.ear.copyto.model.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -120,6 +120,23 @@ public class OrderService {
     @Transactional(readOnly = true)
     public List<OrderContainer> findContainersByClient(User user) {
         return containerDao.findByClient(user);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Order> findAvailableOrders(){
+        List<OrderContainer> containers = findContainers();
+        ArrayList<Order> availableOrders = new ArrayList<>();
+        for(OrderContainer container : containers){
+            if(container.getAssignee() == null){
+                availableOrders.add(container.getOrder());
+            }
+        }
+        return availableOrders;
+    }
+
+    @Transactional(readOnly = true)
+    public List<User> findCandidates(OrderContainer container){
+        return container.getCandidates();
     }
 
     @Transactional(readOnly = true) // TODO RENAME

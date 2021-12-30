@@ -1,7 +1,10 @@
 package cz.cvut.kbss.ear.copyto.rest;
 
+import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
 import cz.cvut.kbss.ear.copyto.exception.ValidationException;
+import cz.cvut.kbss.ear.copyto.model.Order;
 import cz.cvut.kbss.ear.copyto.model.OrderContainer;
+import cz.cvut.kbss.ear.copyto.model.users.User;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
 import cz.cvut.kbss.ear.copyto.service.OrderService;
 import org.slf4j.Logger;
@@ -29,20 +32,6 @@ public class OrderContainerController {
         this.orderService = workplaceService;
     }
 
-    @GetMapping
-    public List<OrderContainer> getAllContainers() {
-        return orderService.findContainers();
-    }
-
-/*    @GetMapping
-    public List<OrderContainer> getAvailableContainers() {
-        return orderService.findAvailableOrders();
-    }*/
-
-    /*@GetMapping List<Copywriter> getCandidates() {
-        return orderService.findCandidates();
-    }*/
-
     // TODO filter
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createOrderContainer(@RequestBody OrderContainer container) {
@@ -51,6 +40,29 @@ public class OrderContainerController {
         final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/id/{id}", container.getId());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
+
+    // ---------------------------------------------------------
+
+    @GetMapping
+    public List<OrderContainer> getAllContainers() {
+        return orderService.findContainers();
+    }
+
+    @GetMapping(value="/id/{id}/candidates", produces = MediaType.APPLICATION_JSON_VALUE)
+    List<User> getCandidates(@PathVariable Integer id) {
+        OrderContainer container = orderService.findContainer(id);
+        return orderService.findCandidates(container);
+    }
+
+    @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Order getById(@PathVariable Integer id) {
+        final Order order = orderService.findOrder(id);
+        if (order == null) {
+            throw NotFoundException.create("order", id);
+        } return order;
+    }
+
+    // ---------------------------------------------------------
 
     // TODO filter
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -62,6 +74,8 @@ public class OrderContainerController {
         }
         orderService.update(container);
     }
+
+    // ---------------------------------------------------------
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/id/{id}")
