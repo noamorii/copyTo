@@ -43,6 +43,23 @@ public class MessageController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
+    // TODO otestuj
+
+    @PostMapping(value = "author-id/{authorId}/ receiver-id/{receiverId}/text/{text}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> sendMessage(@PathVariable Integer authorId, @PathVariable Integer receiverId, @PathVariable String text) {
+        Message message = new Message();
+        message.setAuthor(userService.find(authorId));
+        message.setReceiver(userService.find(receiverId));
+        message.setText(text);
+        messageService.sendMessage(message);
+        LOG.debug("Sended message {}.", message);
+        final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/{id}", message.getId());
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+    }
+
+    // TODO ten druhej groupchat
+
+
     // --------------------READ--------------------------------------
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

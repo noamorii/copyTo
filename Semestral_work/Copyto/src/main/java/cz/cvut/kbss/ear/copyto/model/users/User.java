@@ -49,8 +49,7 @@ public class User extends AbstractEntity {
     @Column(nullable = false)
     private Date dateOfBirth;
 
-    @Basic(optional = false)
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     protected Role role = Role.USER;
 
     public User(String firstName, String surname, String password, String mobile, String email, Date dateOfBirth) {
@@ -72,7 +71,6 @@ public class User extends AbstractEntity {
     public void encodePassword(PasswordEncoder encoder) {
         this.password = encoder.encode(password);
     }
-
 
     public void addConversation(Conversation conversation) {
         conversations.add(conversation);
@@ -141,4 +139,10 @@ public class User extends AbstractEntity {
     public void setConversations(List<Conversation> conversations) {
         this.conversations = conversations;
     }
+
+    public boolean isAdmin() {
+        return role == Role.ADMIN;
+    }
+
+
 }

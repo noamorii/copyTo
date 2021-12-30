@@ -81,16 +81,15 @@ public class MessageService {
 
     // TODO zkontrolovat
     @Transactional
-    public void sendMessage(User author, User receiver, String text) {
-        Message message = new Message(author, receiver, text);
+    public void sendMessage(Message message) {
         messageDao.persist(message);
 
-        List<Conversation> authorsConversation = findConversations(author);
+        List<Conversation> authorsConversation = findConversations(message.getAuthor());
         Conversation toUpdate = null;
 
         // pokud existuje konverzace mezi temito 2 uzivateli
         for (Conversation c : authorsConversation) {
-            if (c.getUsers().contains(receiver) && c.getUsers().size() == 2) {
+            if (c.getUsers().contains(message.getReceiver()) && c.getUsers().size() == 2) {
                 toUpdate = c;
                 break;
             }
@@ -98,8 +97,8 @@ public class MessageService {
 
         if (toUpdate == null) {
             toUpdate = new Conversation();
-            toUpdate.addMember(receiver);
-            toUpdate.addMember(author);
+            toUpdate.addMember(message.getReceiver());
+            toUpdate.addMember(message.getAuthor());
             toUpdate.addMessage(message);
             conversationDao.persist(toUpdate);
         } else {

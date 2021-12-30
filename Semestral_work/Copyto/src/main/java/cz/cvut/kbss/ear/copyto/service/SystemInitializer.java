@@ -44,7 +44,7 @@ public class SystemInitializer {
 
     /**
      * Generates an admin account if it does not already exist.
-     */ // TODO
+     */
     private void generateAdmin() {
         if (userService.exists(ADMIN_USERNAME)) {
             return;
