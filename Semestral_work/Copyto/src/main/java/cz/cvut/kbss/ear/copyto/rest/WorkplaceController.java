@@ -1,8 +1,6 @@
 package cz.cvut.kbss.ear.copyto.rest;
 
 import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
-import cz.cvut.kbss.ear.copyto.exception.ValidationException;
-import cz.cvut.kbss.ear.copyto.model.Version;
 import cz.cvut.kbss.ear.copyto.model.Workplace;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
 import cz.cvut.kbss.ear.copyto.service.WorkplaceService;
@@ -33,7 +31,7 @@ public class WorkplaceController {
 
     // --------------------CREATE--------------------------------------
 
-    //@PostFilter("hasRole('ROLE_ADMIN')") // TODO
+    @PostFilter("hasRole('ROLE_ADMIN')") // TODO
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createWorkplace(@RequestBody Workplace workplace) {
         workplaceService.createWorkplace(workplace);
@@ -44,7 +42,7 @@ public class WorkplaceController {
 
     // --------------------READ--------------------------------------
 
-   // @PostFilter("hasRole('ADMIN')") // TODO
+    @PostFilter("hasRole('ADMIN')") // TODO
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Workplace> getWorkplaces() {
         return workplaceService.findWorkplaces();
