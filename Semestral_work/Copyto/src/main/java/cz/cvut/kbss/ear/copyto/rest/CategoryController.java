@@ -46,8 +46,8 @@ public class CategoryController {
 
     // --------------------READ--------------------------------------
 
-    //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_GUEST', 'ROLE_CLIENT', 'ROLE_COPYWRITER', 'ADMIN', 'USER', 'GUEST', 'CLIENT', 'COPYWRITER', 'ROLE_0', 'ROLE_1', 'ROLE_2', 'ROLE_3', 'ROLE_4', 0, 1, 2, 3, 4)")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_GUEST', 'ROLE_CLIENT', 'ROLE_COPYWRITER', 'ADMIN', 'USER', 'GUEST', 'CLIENT', 'COPYWRITER', 'ROLE_0', 'ROLE_1', 'ROLE_2', 'ROLE_3', 'ROLE_4', 0, 1, 2, 3, 4)")
+    /*@PreAuthorize("permitAll()")*/
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Category> getCategories() {
         return categoryService.findCategories();
@@ -58,8 +58,8 @@ public class CategoryController {
         final Category category = categoryService.findCategory(id);
         if (category == null) {
             throw NotFoundException.create("Category", id);
-        } return index;
-    /*} return category;*/
+        }
+        return category;
     }
 
 
@@ -111,9 +111,7 @@ public class CategoryController {
         LOG.debug("Order {} removed from category {}.", order, category);
     }
 
-/*
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-*/
     @DeleteMapping(value = "/id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeCategory(@PathVariable Integer id) {

@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-public class CategoryControllerTest extends BaseControllerTestRunner {
+public class CategoryRestControllerTest extends BaseControllerTestRunner {
 
     @Mock
     private CategoryService categoryServiceMock;

@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -57,8 +58,18 @@ public class MessageController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    // TODO ten druhej groupchat
-
+    @PostMapping(value = "author-id/{authorId}/text/{text}/group-message",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> sendGroupMessage(@RequestBody ArrayList<Integer> userIds, @PathVariable Integer authorId, @PathVariable String text) {
+        User author = userService.find(authorId);
+        List<User> receivers = new ArrayList<>();
+        for(Integer id : userIds){
+            receivers.add(userService.find(id));
+        }
+        messageService.sendGroupMessage(author, receivers, text);
+        LOG.debug("Sended group message {}.", text);
+        final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/");
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+    }
 
     // --------------------READ--------------------------------------
 
