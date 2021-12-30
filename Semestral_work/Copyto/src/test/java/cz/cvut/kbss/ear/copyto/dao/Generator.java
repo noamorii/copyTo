@@ -89,21 +89,21 @@ public class Generator {
         return inCategory;
     }
 
-//    public static OrderContainer generateOrderContainer(EntityManager em){
-//        final OrderContainer o = new OrderContainer();
-//        List<Copywriter> candidates = new ArrayList<>();
-//        Client client = generateClient();
-//        em.persist(client);
-//        OrderDetail orderDetail = generateOrder();
-//        em.persist(orderDetail);
-//        Workplace workplace = generateWorkplace();
-//        em.persist(workplace);
-//        o.setCandidates(candidates);
-//        o.setClient(client);
-//        o.setOrderDetail(orderDetail);
-//        o.setWorkplace(workplace);
-//        return o;
-//    }
+/*    public static OrderContainer generateOrderContainer(EntityManager em){
+        final OrderContainer o = new OrderContainer();
+        List<Copywriter> candidates = new ArrayList<>();
+        Client client = generateClient();
+        em.persist(client);
+        OrderDetail orderDetail = generateOrder();
+        em.persist(orderDetail);
+        Workplace workplace = generateWorkplace();
+        em.persist(workplace);
+        o.setCandidates(candidates);
+        o.setClient(client);
+        o.setOrderDetail(orderDetail);
+        o.setWorkplace(workplace);
+        return o;
+    }*/
 
     /*============CATEGORY GENERATOR===============*/
 

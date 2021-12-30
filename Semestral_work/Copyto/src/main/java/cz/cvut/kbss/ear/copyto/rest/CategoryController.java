@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -47,11 +46,10 @@ public class CategoryController {
 
     // --------------------READ--------------------------------------
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_GUEST', 'ROLE_CLIENT', 'ROLE_COPYWRITER', 'ADMIN', 'USER', 'GUEST', 'CLIENT', 'COPYWRITER', 'ROLE_0', 'ROLE_1', 'ROLE_2', 'ROLE_3', 'ROLE_4', 0, 1, 2, 3, 4)")
-    //@PreAuthorize("permitAll()")
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_GUEST', 'ROLE_CLIENT', 'ROLE_COPYWRITER', 'ADMIN', 'USER', 'GUEST', 'CLIENT', 'COPYWRITER', 'ROLE_0', 'ROLE_1', 'ROLE_2', 'ROLE_3', 'ROLE_4', 0, 1, 2, 3, 4)")
+    @PreAuthorize("permitAll()")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Category> getCategories() {
-        System.out.println("aaaaaaaa");
         return categoryService.findCategories();
     }
 
@@ -60,7 +58,8 @@ public class CategoryController {
         final Category category = categoryService.findCategory(id);
         if (category == null) {
             throw NotFoundException.create("Category", id);
-        } return category;
+        } return index;
+    /*} return category;*/
     }
 
 
