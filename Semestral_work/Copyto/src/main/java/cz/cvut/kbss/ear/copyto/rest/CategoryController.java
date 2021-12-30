@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,10 +46,10 @@ public class CategoryController {
 
     // --------------------READ--------------------------------------
 
-    //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_GUEST', 'ROLE_CLIENT', 'ROLE_COPYWRITER', 'ADMIN', 'USER', 'GUEST', 'CLIENT', 'COPYWRITER', 'ROLE_0', 'ROLE_1', 'ROLE_2', 'ROLE_3', 'ROLE_4', 0, 1, 2, 3, 4)")
-    @PreAuthorize("permitAll()")
-    @GetMapping()
-    public List<Category> getCategories(MultiValueMap body) {
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+  //  @PreAuthorize("permitAll()")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Category> getCategories() {
         return categoryService.findCategories();
     }
 
