@@ -16,13 +16,13 @@ import java.util.Date;
 })
 public class Contract extends AbstractEntity{
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToOne(cascade = CascadeType.MERGE)
     private User client;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToOne(cascade = CascadeType.MERGE)
     private User copywriter;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToOne(cascade = CascadeType.MERGE)
     private Order order;
 
     @Basic(optional = false)

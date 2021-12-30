@@ -1,4 +1,4 @@
-package cz.cvut.kbss.ear.copyto.model;
+package cz.cvut.kbss.ear.copyto.enums;
 
 public enum OrderState {
     ADDED,

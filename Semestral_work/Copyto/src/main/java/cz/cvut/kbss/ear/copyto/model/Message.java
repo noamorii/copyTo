@@ -17,10 +17,10 @@ import java.util.Date;
 
 public class Message extends AbstractEntity {
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToOne(cascade = CascadeType.MERGE)
     private User author;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToOne(cascade = CascadeType.MERGE)
     private User receiver;
 
     @Basic(optional = false)

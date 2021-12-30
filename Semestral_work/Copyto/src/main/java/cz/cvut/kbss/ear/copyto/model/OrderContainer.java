@@ -17,10 +17,10 @@ import java.util.List;
 })
 public class OrderContainer extends AbstractEntity{
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-    private User assignee = null; // TODO default null
+    @OneToOne(cascade = CascadeType.MERGE)
+    private User assignee = null;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToOne(cascade = CascadeType.MERGE)
     private User client;
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REMOVE})

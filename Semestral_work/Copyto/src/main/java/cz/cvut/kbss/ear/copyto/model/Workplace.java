@@ -13,7 +13,7 @@ import java.util.List;
 public class Workplace extends AbstractEntity{
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
-    @JoinColumn(name = "versionId")
+    @JoinColumn(name = "workplaceId")
     List<Version> versions = new ArrayList<>();
 
     @Basic(optional = false)

@@ -1,5 +1,7 @@
 package cz.cvut.kbss.ear.copyto.model;
 
+import cz.cvut.kbss.ear.copyto.enums.OrderState;
+
 import javax.persistence.*;
 
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ public class Order extends AbstractEntity{
     private List<Category> categories = new ArrayList<>();
 
     @Basic(optional = false)
-    @Column(nullable = true) // TODO kontrola
+    @Column(nullable = true)
     private double price;
 
     @Basic(optional = false)
@@ -30,11 +32,11 @@ public class Order extends AbstractEntity{
     private Date insertionDate = new Date();
 
     @Basic(optional = false)
-    @Column(nullable = true) // TODO kontrola
+    @Column(nullable = true)
     private Date deadline;
 
     @Basic(optional = false)
-    @Column(nullable = true) //todo ask ondra
+    @Column(nullable = true)
     private String link;
 
     public Order(){}
@@ -44,7 +46,7 @@ public class Order extends AbstractEntity{
         this.insertionDate = new Date();
     }
 
-    // TOTO mapovani enumu
+    @Enumerated(EnumType.STRING)
     private OrderState state = OrderState.ADDED;
 
     public void setCategory(Category category){

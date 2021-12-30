@@ -1,7 +1,6 @@
 package cz.cvut.kbss.ear.copyto.rest;
 
 import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
-import cz.cvut.kbss.ear.copyto.model.Category;
 import cz.cvut.kbss.ear.copyto.model.users.User;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
 import cz.cvut.kbss.ear.copyto.security.model.AuthenticationToken;
@@ -37,9 +36,7 @@ public class UserController {
      *
      * @param user User data
      */
-/*
     @PreAuthorize("(!#user.isAdmin() && anonymous) || hasRole('ROLE_ADMIN')")
-*/
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> register(@RequestBody User user) {
         userService.createAccount(user);
@@ -48,9 +45,7 @@ public class UserController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-/*
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_GUEST')")
-*/
     @GetMapping(value = "/current", produces = MediaType.APPLICATION_JSON_VALUE)
     public User getCurrent(Principal principal) {
         final AuthenticationToken auth = (AuthenticationToken) principal;

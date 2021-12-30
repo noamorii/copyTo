@@ -63,7 +63,7 @@ public class OrderContainerController {
         orderService.update(container);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeContainer(@PathVariable Integer id){

@@ -23,7 +23,7 @@ public class Conversation extends AbstractEntity{
     }
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
-    @JoinColumn(name = "messageId")
+    @JoinColumn(name = "converstaionId")
     private List<Message> messages = new ArrayList<>();
 
     @ManyToMany
