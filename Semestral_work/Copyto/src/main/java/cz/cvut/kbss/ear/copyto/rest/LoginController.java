@@ -4,14 +4,17 @@ import cz.cvut.kbss.ear.copyto.service.LoginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.HashMap;
 
 @Controller
 @RequestMapping("/auth")
@@ -35,12 +38,11 @@ public class LoginController {
         return "redirect:/";
     }
 
-//    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public String loginUser(@RequestBody HashMap<String, String> request) throws Exception {
-//        System.out.println("aaaaaaaaaaaaaaaaaaaaaa");
-//        loginService.loginUser(request.get("email"), request.get("password"));
-//        LOG.trace("User {} successfully logged in", request.get("email"));
-//        return "index";
-//    }
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String loginUser(@RequestBody HashMap<String, String> request) throws Exception {
+        loginService.loginUser(request.get("email"), request.get("password"));
+        LOG.trace("User {} successfully logged in", request.get("email"));
+        return "index";
+    }
 }
 
