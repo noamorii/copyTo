@@ -1,11 +1,12 @@
 package cz.cvut.kbss.ear.copyto.rest;
 
+import cz.cvut.kbss.ear.copyto.enums.Role;
 import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
-import cz.cvut.kbss.ear.copyto.exception.ValidationException;
 import cz.cvut.kbss.ear.copyto.model.Order;
 import cz.cvut.kbss.ear.copyto.model.OrderContainer;
 import cz.cvut.kbss.ear.copyto.model.users.User;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
+import cz.cvut.kbss.ear.copyto.security.model.AuthenticationToken;
 import cz.cvut.kbss.ear.copyto.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +15,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -28,7 +31,7 @@ public class OrderContainerController {
     private final OrderService orderService;
 
     @Autowired
-    public OrderContainerController(OrderService workplaceService){
+    public OrderContainerController(OrderService workplaceService) {
         this.orderService = workplaceService;
     }
 
@@ -41,7 +44,7 @@ public class OrderContainerController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    // ---------------------------------------------------------
+    // --------------------------READ-------------------------------
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
@@ -50,45 +53,38 @@ public class OrderContainerController {
     }
 
     // TODO OPRAVNENY USER
-    @GetMapping(value="/id/{id}/candidates", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/id/{id}/candidates", produces = MediaType.APPLICATION_JSON_VALUE)
     List<User> getCandidates(@PathVariable Integer id) {
         OrderContainer container = orderService.findContainer(id);
         return orderService.findCandidates(container);
     }
 
-    @PreAuthorize("hasRole('ROLE_COPYWRITER')") // TODO + ADMIN + VLASTNIK
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Order getById(@PathVariable Integer id) {
         final Order order = orderService.findOrder(id);
         if (order == null) {
             throw NotFoundException.create("order", id);
-        } return order;
-    }
-
-    // ---------------------------------------------------------
-
-    // TODO opravneny copywriter
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateVersion(@PathVariable Integer id, @RequestBody OrderContainer container) {
-        final OrderContainer original = orderService.findContainer(id);
-        if(!original.getId().equals(container.getId())){
-            throw new ValidationException("OrderContainer identifier in the data does not match the one in the request URL.");
         }
-        orderService.update(container);
+        return order;
     }
 
-    // ---------------------------------------------------------
+    // --------------------------DELETE-------------------------------
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')") // + opravneny vlastnik
     @DeleteMapping(value = "/id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeContainer(@PathVariable Integer id){
+    public void removeContainer(Principal principal, @PathVariable Integer id) {
         final OrderContainer toRemove = orderService.findContainer(id);
-        if(toRemove == null) {
+        if (toRemove == null) {
             return;
         }
-        orderService.remove(toRemove);
-        LOG.debug("Removed version {}.", toRemove);
+        final AuthenticationToken auth = (AuthenticationToken) principal;
+        if (auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
+                auth.getPrincipal().getUser().getId().equals(toRemove.getClient().getId())) {
+            orderService.remove(toRemove);
+            LOG.debug("Removed version {}.", toRemove);
+        } else {
+            throw new AccessDeniedException("Cannot delete someones else order");
+        }
     }
 }

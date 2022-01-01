@@ -138,12 +138,12 @@ public class OrderService {
         return container.getCandidates();
     }
 
-    @Transactional(readOnly = true) // TODO RENAME
+    @Transactional(readOnly = true)
     public OrderContainer findContainer(int id) {
         return containerDao.find(id);
     }
 
-    @Transactional(readOnly = true) // TODO RENAME
+    @Transactional(readOnly = true)
     public OrderContainer findContainer(Order order) {
         return containerDao.findByDetail(order);
     }
@@ -177,5 +177,11 @@ public class OrderService {
     public void remove(OrderContainer container) {
         Objects.requireNonNull(container);
         containerDao.remove(container);
+    }
+
+    @Transactional
+    public void remove(Order order) {
+        Objects.requireNonNull(order);
+        orderDao.remove(order);
     }
 }

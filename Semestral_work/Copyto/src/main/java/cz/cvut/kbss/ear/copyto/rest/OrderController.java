@@ -1,10 +1,11 @@
 package cz.cvut.kbss.ear.copyto.rest;
 
+import cz.cvut.kbss.ear.copyto.enums.Role;
 import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
-import cz.cvut.kbss.ear.copyto.exception.ValidationException;
 import cz.cvut.kbss.ear.copyto.model.Order;
 import cz.cvut.kbss.ear.copyto.model.OrderContainer;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
+import cz.cvut.kbss.ear.copyto.security.model.AuthenticationToken;
 import cz.cvut.kbss.ear.copyto.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +14,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -31,6 +34,19 @@ public class OrderController {
         this.orderService = workplaceService;
     }
 
+    // --------------------POST--------------------------------------
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')") // OPRAVNENY
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> createOrder(@RequestBody Order order) {
+        orderService.addOrder(order);
+        LOG.debug("create order {}.", order);
+        final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/order/{id}", order.getId());
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+    }
+
+    // --------------------READ--------------------------------------
+
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COPYWRITER')")
     @GetMapping
     List<Order> getAllOrder() {
@@ -43,7 +59,7 @@ public class OrderController {
         return orderService.findAvailableOrders();
     }
 
-    // todo vlastnik, admin
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public OrderContainer getById(@PathVariable Integer id) {
         final OrderContainer container = orderService.findContainer(id);
@@ -52,23 +68,42 @@ public class OrderController {
         } return container;
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_CLIENT')") // OPRAVNENY
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createOrder(@RequestBody Order order) {
-        orderService.addOrder(order);
-        LOG.debug("create order {}.", order);
-        final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/order/{id}", order.getId());
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
-    }
+    // --------------------UPDATE--------------------------------------
 
-    // TODO OPRAVNENY COPYWRITER
     @PutMapping(value = "/id/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateVersion(@PathVariable Integer id, @RequestBody Order order) {
+    public void update(Principal principal, @PathVariable Integer id, @RequestBody Order order) {
         final Order original = orderService.findOrder(id);
-        if(!original.getId().equals(order.getId())){
-            throw new ValidationException("OrderDetail identifier in the data does not match the one in the request URL.");
+        final OrderContainer container = orderService.findContainer(order);
+
+        original.setState(order.getState());
+        original.setCategories(order.getCategories());
+        original.setDeadline(order.getDeadline());
+        original.setLink(order.getLink());
+        original.setPrice(order.getPrice());
+
+        final AuthenticationToken auth = (AuthenticationToken) principal;
+        if(auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
+                auth.getPrincipal().getUser().getId().equals(container.getClient().getId())){
+            orderService.update(original);
         }
-        orderService.update(order);
+    }
+
+    @DeleteMapping(value = "/id/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeContainer(Principal principal, @PathVariable Integer id) {
+        final Order toRemove = orderService.findOrder(id);
+        final OrderContainer container = orderService.findContainer(toRemove);
+        if (toRemove == null) {
+            return;
+        }
+        final AuthenticationToken auth = (AuthenticationToken) principal;
+        if (auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
+                auth.getPrincipal().getUser().getId().equals(container.getClient().getId())) {
+            orderService.remove(toRemove);
+            LOG.debug("Removed version {}.", toRemove);
+        } else {
+            throw new AccessDeniedException("Cannot delete someones else order");
+        }
     }
 }

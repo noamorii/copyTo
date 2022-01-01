@@ -29,7 +29,7 @@ public class OrderContainer extends AbstractEntity{
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     private Workplace workplace = new Workplace();
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true) // TODO ZKONTROLOVAT, ZE TOHLE DB NEPROMAZE
     @OrderBy("email")
     private List<User> candidates = new ArrayList<>();
 
