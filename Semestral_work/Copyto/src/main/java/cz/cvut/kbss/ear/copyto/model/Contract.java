@@ -14,7 +14,7 @@ import java.util.Date;
         @NamedQuery(name = "Contract.findAllByDateOfAgreement", query = "SELECT c FROM Contract c WHERE :dateOfAgreement = c.dateOfAgreement"),
         @NamedQuery(name = "Contract.findAllByDate", query = "SELECT c FROM Contract c WHERE :date = c.date")
 })
-public class Contract extends AbstractEntity{
+public class Contract extends AbstractEntity {
 
     @OneToOne(cascade = CascadeType.MERGE)
     private User client;
@@ -43,6 +43,24 @@ public class Contract extends AbstractEntity{
     @Column(nullable = true)
     private double penalty = 0;
 
+    @Basic(optional = false)
+    @Column(nullable = false)
+    private boolean approvedByClient = false;
+
+    @Basic(optional = false)
+    @Column(nullable = false)
+    private boolean approvedByCopywriter = false;
+
+    @Basic(optional = false)
+    @Column(nullable = false)
+    private boolean finishedWork = false;
+
+    @Basic(optional = false)
+    @Column(nullable = false)
+    private boolean paid = false;
+
+    // TODO confirm by them
+
     public Contract(User client, User copywriter, Order order, Date date, double price) {
         this.client = client;
         this.copywriter = copywriter;
@@ -62,6 +80,7 @@ public class Contract extends AbstractEntity{
 
     public Contract() {
     }
+
 
     public User getClient() {
         return client;

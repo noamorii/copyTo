@@ -3,7 +3,6 @@ package cz.cvut.kbss.ear.copyto.service;
 import cz.cvut.kbss.ear.copyto.dao.ContractDao;
 import cz.cvut.kbss.ear.copyto.dao.UserDao;
 import cz.cvut.kbss.ear.copyto.model.Contract;
-import cz.cvut.kbss.ear.copyto.model.Message;
 import cz.cvut.kbss.ear.copyto.model.Order;
 import cz.cvut.kbss.ear.copyto.model.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +54,8 @@ public class ContractService {
         contractDao.persist(contract);
     }
 
+    // TODO
+
     @Transactional
     public void negotiateAgreement(User client, User copywriter, Order order, Date date, double price){
         Contract contract = new Contract(client, copywriter, order, date, price);
@@ -66,6 +67,8 @@ public class ContractService {
         Contract contract = new Contract(client, copywriter, order, date, price, penalty);
         contractDao.persist(contract);
     }
+
+    // TODO Confirm agreement
 
 
 

@@ -50,6 +50,7 @@ public class ClientController {
         if (auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
                 container.getClient().getId().equals(auth.getPrincipal().getUser().getId())) {
             clientService.authorizeAssignee(container, copywriter);
+            LOG.debug("Order {} has new assignee {}.", orderId, assiggneId);
         } else {
             throw new AccessDeniedException("Cannot access order of another client");
         }
@@ -70,6 +71,7 @@ public class ClientController {
         if (auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
                 container.getClient().getId().equals(auth.getPrincipal().getUser().getId())) {
             clientService.changeAssignee(container, copywriter);
+            LOG.debug("Order {} has new assignee {}.", orderId, assiggneId);
         } else {
             throw new AccessDeniedException("Cannot access order of another client");
         }
@@ -86,6 +88,7 @@ public class ClientController {
         if (auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
                 container.getClient().getId().equals(auth.getPrincipal().getUser().getId())) {
             clientService.changeVisibility(container);
+            LOG.debug("Order {} change visibility.", id);
         } else {
             throw new AccessDeniedException("Cannot access order of another client");
         }
