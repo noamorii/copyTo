@@ -47,8 +47,18 @@ public class WorkplaceService {
     }
 
     @Transactional(readOnly = true)
-    public List<Version> findVersion(Date date) {
+    public List<Version> findVersions(Date date) {
         return versionDao.findByDate(date);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Version> findVersions(Workplace workplace) {
+        return workplaceDao.findWorkplaceVersions(workplace);
+    }
+
+    @Transactional(readOnly = true)
+    public Workplace findWorkplace(Version version){
+        return workplaceDao.findWorkplaceByVersion(version);
     }
 
     @Transactional(readOnly = true)

@@ -47,7 +47,7 @@ public class CopywriterService extends UserService{
     @Transactional
     public void signUpForOrder(User candidate, Order order){
         if(candidate.getRole() == Role.COPYWRITER){
-            OrderContainer container = containerDao.findByDetail(order);
+            OrderContainer container = containerDao.findByOrder(order);
             container.addCandidate(candidate);
             containerDao.update(container);
         }

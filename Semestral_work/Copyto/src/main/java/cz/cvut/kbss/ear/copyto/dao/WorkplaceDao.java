@@ -22,4 +22,15 @@ public class WorkplaceDao extends BaseDao<Workplace> {
         return em.createNamedQuery("Workplace.findEditable", Workplace.class)
                 .getResultList();
     }
+
+    public List<Version> findWorkplaceVersions(Workplace workplace){
+        return em.createNamedQuery("Workplace.findWorkplaceVersions", Version.class).setParameter("id", workplace)
+                .getResultList();
+    }
+
+    public Workplace findWorkplaceByVersion(Version version){ // TODO zkontrolovat
+        return em.createNamedQuery("Workplace.findWorkplaceByVersion", Workplace.class).setParameter("id", version)
+                .getSingleResult();
+    }
+
 }

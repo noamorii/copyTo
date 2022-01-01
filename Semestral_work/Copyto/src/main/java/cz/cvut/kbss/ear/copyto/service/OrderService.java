@@ -6,6 +6,7 @@ import cz.cvut.kbss.ear.copyto.enums.OrderState;
 import cz.cvut.kbss.ear.copyto.model.Category;
 import cz.cvut.kbss.ear.copyto.model.Order;
 import cz.cvut.kbss.ear.copyto.model.OrderContainer;
+import cz.cvut.kbss.ear.copyto.model.Workplace;
 import cz.cvut.kbss.ear.copyto.model.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -145,7 +146,12 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public OrderContainer findContainer(Order order) {
-        return containerDao.findByDetail(order);
+        return containerDao.findByOrder(order);
+    }
+
+    @Transactional(readOnly = true)
+    public OrderContainer findContainer(Workplace workplace) {
+        return containerDao.findByWorkplace(workplace);
     }
 
     @Transactional(readOnly = true)

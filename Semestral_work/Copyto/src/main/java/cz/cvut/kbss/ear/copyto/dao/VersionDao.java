@@ -22,5 +22,4 @@ public class VersionDao extends BaseDao<Version> {
         return em.createNamedQuery("Version.findByTitle", Version.class).setParameter("title", title)
                 .getResultList();
     }
-
 }

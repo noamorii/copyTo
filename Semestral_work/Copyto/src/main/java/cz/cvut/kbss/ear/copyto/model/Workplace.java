@@ -8,7 +8,9 @@ import java.util.List;
 @Table(name = "C_Workplace")
 @NamedQueries({
         @NamedQuery(name = "Workplace.findEditable", query = "SELECT w from Workplace w WHERE :editable = TRUE"),
-        @NamedQuery(name = "Workplace.findAllVersions", query = "select w.versions from Workplace w")
+        @NamedQuery(name = "Workplace.findAllVersions", query = "select w.versions from Workplace w"),
+        @NamedQuery(name = "Workplace.findWorkplaceVersions", query = "select w.versions from Workplace w WHERE :id = w.id"),
+        @NamedQuery(name = "Workplace.findWorkplaceByVersion", query = "select w from Workplace w WHERE :id = w.id")
 })
 public class Workplace extends AbstractEntity{
 
