@@ -193,7 +193,6 @@ public class VersionController {
         }
     }
 
-    // todo vlastnik + copywriter
     @PutMapping(value = "/id/{id}/title/{title}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateTitle(Principal principal, @PathVariable Integer id, @PathVariable String title) {
@@ -218,17 +217,22 @@ public class VersionController {
     @PreAuthorize("hasRole('ADMIN')") // + todo vlastnik, copywriter
     @DeleteMapping(value = "/id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeVersion(@PathVariable Integer id) {
+    public void removeVersion(Principal principal, @PathVariable Integer id) {
         final Version toRemove = workplaceService.findVersion(id);
-
-        //TODO find workplace by version a nahradit
-        final List<Workplace> workplaces = workplaceService.findWorkplaces();
-        for (Workplace w : workplaces) {
-            if (w.getVersions().contains(toRemove)) {
-                workplaceService.remove(w, toRemove);
-                break;
-            }
+        if (toRemove == null) {
+            throw NotFoundException.create("version", id);
         }
-        LOG.debug("Removed version {}.", toRemove);
+
+        final AuthenticationToken auth = (AuthenticationToken) principal;
+        final Workplace workplace = workplaceService.findWorkplace(toRemove); // TODO tady cekam, ze to mozna nebude fungovat
+        final OrderContainer container = orderService.findContainer(workplace);
+        if (auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
+                auth.getPrincipal().getUser().getId().equals(container.getClient().getId()) ||
+                auth.getPrincipal().getUser().getId().equals(container.getAssignee().getId())) {
+            workplaceService.remove(workplace, toRemove);
+            LOG.debug("Removed version {}.", toRemove);
+        } else {
+            throw new AccessDeniedException("Cannot update this version.");
+        }
     }
 }

@@ -1,8 +1,12 @@
 package cz.cvut.kbss.ear.copyto.rest;
 
+import cz.cvut.kbss.ear.copyto.enums.Role;
 import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
+import cz.cvut.kbss.ear.copyto.model.OrderContainer;
 import cz.cvut.kbss.ear.copyto.model.Workplace;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
+import cz.cvut.kbss.ear.copyto.security.model.AuthenticationToken;
+import cz.cvut.kbss.ear.copyto.service.OrderService;
 import cz.cvut.kbss.ear.copyto.service.WorkplaceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +15,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -23,16 +29,18 @@ public class WorkplaceController {
     private static final Logger LOG = (Logger) LoggerFactory.getLogger(WorkplaceController.class);
 
     private final WorkplaceService workplaceService;
+    private final OrderService orderService;
 
     @Autowired
-    public WorkplaceController(WorkplaceService workplaceService){
+    public WorkplaceController(WorkplaceService workplaceService, OrderService orderService){
         this.workplaceService = workplaceService;
+        this.orderService = orderService;
     }
 
     // --------------------CREATE--------------------------------------
 
     // pro testovani - pro fungovani nepotrebne, vytvari se automaticky
-    @PostFilter("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createWorkplace(@RequestBody Workplace workplace) {
         workplaceService.createWorkplace(workplace);
@@ -44,13 +52,13 @@ public class WorkplaceController {
     // --------------------READ--------------------------------------
 
 
-    @PostFilter("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Workplace> getWorkplaces() {
         return workplaceService.findWorkplaces();
     }
 
-    @PostFilter("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Workplace getById(@PathVariable Integer id) {
         final Workplace workplace = workplaceService.findWorkplace(id);
@@ -62,16 +70,26 @@ public class WorkplaceController {
 
     // --------------------UPDATE--------------------------------------
 
-    // todo vlastnik
     @PutMapping(value = "/id-open/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void changeWorkplaceStatus(@PathVariable Integer id) {
+    public void changeWorkplaceStatus(Principal principal, @PathVariable Integer id) {
         final Workplace original = workplaceService.findWorkplace(id);
-        /*if(!original.getId().equals(workplace.getId())){
-            throw new ValidationException("Workplace identifier in the data does not match the one in the request URL.");
-        }*/
-        workplaceService.changeWorkplaceStatus(original);
-        workplaceService.update(original);
+        if (original == null) {
+            throw NotFoundException.create("workplace", id);
+        }
+        final OrderContainer container = orderService.findContainer(original);
+        if (container == null) {
+            throw NotFoundException.create("Container", id);
+        }
+        final AuthenticationToken auth = (AuthenticationToken) principal;
+        if(auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
+        auth.getPrincipal().getUser().getId().equals(container.getAssignee().getId()) ||
+        auth.getPrincipal().getUser().getId().equals(container.getClient().getId())){
+            workplaceService.changeWorkplaceStatus(original);
+            workplaceService.update(original);
+        } else {
+            throw new AccessDeniedException("Cannot update this workplace.");
+        }
     }
 
     // --------------------DELETE--------------------------------------
@@ -79,12 +97,25 @@ public class WorkplaceController {
     //TODO vlastnik
     @DeleteMapping(value = "/id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void resetWorkplace(@PathVariable Integer id){
+    public void resetWorkplace(Principal principal, @PathVariable Integer id){
         final Workplace toReset = workplaceService.findWorkplace(id);
-        if(toReset == null){
-            return;
+        if (toReset == null) {
+            throw NotFoundException.create("workplace", id);
         }
-        workplaceService.reset(toReset);
-        LOG.debug("Reset workplace {}.", toReset);
+        final OrderContainer container = orderService.findContainer(toReset);
+        if (container == null) {
+            throw NotFoundException.create("Container", id);
+        }
+        final AuthenticationToken auth = (AuthenticationToken) principal;
+        if(auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
+                auth.getPrincipal().getUser().getId().equals(container.getAssignee().getId()) ||
+                auth.getPrincipal().getUser().getId().equals(container.getClient().getId())){
+            workplaceService.reset(toReset);
+            LOG.debug("Reset workplace {}.", toReset);
+        } else {
+            throw new AccessDeniedException("Cannot update this workplace.");
+        }
+
+
     }
 }
