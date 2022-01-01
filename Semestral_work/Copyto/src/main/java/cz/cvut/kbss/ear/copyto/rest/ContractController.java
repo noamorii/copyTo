@@ -5,6 +5,7 @@ import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
 import cz.cvut.kbss.ear.copyto.model.Contract;
 import cz.cvut.kbss.ear.copyto.model.Message;
 import cz.cvut.kbss.ear.copyto.model.Order;
+import cz.cvut.kbss.ear.copyto.model.OrderContainer;
 import cz.cvut.kbss.ear.copyto.model.users.User;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
 import cz.cvut.kbss.ear.copyto.security.model.AuthenticationToken;
@@ -98,7 +99,6 @@ public class ContractController {
         return contract;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')") // todo + opravneny client
     @GetMapping(value = "/id-client/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Contract> getByClient(Principal principal, @PathVariable Integer id) {
         final User user = userService.find(id);
@@ -111,14 +111,13 @@ public class ContractController {
         }
         final AuthenticationToken auth = (AuthenticationToken) principal;
         if (auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
-                auth.getPrincipal().getUser().getId() == id) {
+                auth.getPrincipal().getUser().getId().equals(id)) {
             return contracts;
         } else {
             throw new AccessDeniedException("Cannot access contracts of another user");
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')") // todo + opravneny copywriter
     @GetMapping(value = "/id-copywriter/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Contract> getByCopywrite(Principal principal, @PathVariable Integer id) {
         final User user = userService.find(id);
@@ -131,24 +130,28 @@ public class ContractController {
         }
         final AuthenticationToken auth = (AuthenticationToken) principal;
         if (auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
-                auth.getPrincipal().getUser().getId() == id) {
+                auth.getPrincipal().getUser().getId().equals(id)) {
             return contracts;
         } else {
             throw new AccessDeniedException("Cannot access contracts of another user");
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')") // todo + opravneny client + opravneny copywriter
     @GetMapping(value = "/id-order/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Contract> getByOrder(Principal principal, @PathVariable Integer id) {
         final Order order = orderService.findOrder(id);
+        final OrderContainer container = orderService.findContainer(order);
+        if (order == null || container == null) {
+            throw NotFoundException.create("contract for order", id);
+        }
         final List<Contract> contracts = contractService.findContract(order);
         if (contracts == null) {
-            throw NotFoundException.create("contract", id);
+            throw NotFoundException.create("contract for order", id);
         }
         final AuthenticationToken auth = (AuthenticationToken) principal;
         if (auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
-                auth.getPrincipal().getUser().getId() == id) {
+                auth.getPrincipal().getUser().getId().equals(container.getClient().getId()) ||
+                auth.getPrincipal().getUser().getId().equals(container.getAssignee().getId())) {
             return contracts;
         } else {
             throw new AccessDeniedException("Cannot access contracts of another user");
