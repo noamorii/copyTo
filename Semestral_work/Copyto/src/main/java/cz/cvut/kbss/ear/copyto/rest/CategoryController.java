@@ -97,7 +97,7 @@ public class CategoryController {
         if (order == null || container == null) {
             throw NotFoundException.create("order", orderId);
         }
-        if(auth.getPrincipal().getUser().getRole() != Role.ADMIN &&
+        if(auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
                 container.getClient().getId().equals(auth.getPrincipal().getUser().getId()))
         {
             categoryService.addOrder(category, order);

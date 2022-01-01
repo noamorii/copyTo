@@ -1,7 +1,10 @@
 package cz.cvut.kbss.ear.copyto.rest;
 
+import cz.cvut.kbss.ear.copyto.enums.Role;
+import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
 import cz.cvut.kbss.ear.copyto.model.OrderContainer;
 import cz.cvut.kbss.ear.copyto.model.users.User;
+import cz.cvut.kbss.ear.copyto.security.model.AuthenticationToken;
 import cz.cvut.kbss.ear.copyto.service.ClientService;
 import cz.cvut.kbss.ear.copyto.service.OrderService;
 import cz.cvut.kbss.ear.copyto.service.UserService;
@@ -10,7 +13,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/rest/client")
@@ -23,37 +29,65 @@ public class ClientController {
     private final OrderService orderService;
 
     @Autowired
-    public ClientController(ClientService clientService, UserService userService, OrderService orderService){
+    public ClientController(ClientService clientService, UserService userService, OrderService orderService) {
         this.clientService = clientService;
         this.userService = userService;
         this.orderService = orderService;
     }
 
-    // TODO opravneny client
     @PutMapping(value = "/id-assignee/{assiggneId}/id-container/{orderId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void authorizeAssignee(@PathVariable Integer assiggneId, @PathVariable Integer orderId) {
+    public void authorizeAssignee(Principal principal, @PathVariable Integer assiggneId, @PathVariable Integer orderId) {
         User copywriter = userService.find(assiggneId);
-        OrderContainer container = orderService.findContainer(orderId);
-        clientService.authorizeAssignee(container, copywriter);
+        if (copywriter == null) {
+            throw NotFoundException.create("Copywriter", assiggneId);
+        }
+        final OrderContainer container = orderService.findContainer(orderId);
+        if (container == null) {
+            throw NotFoundException.create("Order container", orderId);
+        }
+        final AuthenticationToken auth = (AuthenticationToken) principal;
+        if (auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
+                container.getClient().getId().equals(auth.getPrincipal().getUser().getId())) {
+            clientService.authorizeAssignee(container, copywriter);
+        } else {
+            throw new AccessDeniedException("Cannot access order of another client");
+        }
     }
 
-    // TODO opravneny client
     @PutMapping(value = "/change/id-assignee/{assiggneId}/id-container/{orderId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void changeAssignee(@PathVariable Integer assiggneId, @PathVariable Integer orderId) {
-        User copywriter = userService.find(assiggneId);
+    public void changeAssignee(Principal principal, @PathVariable Integer assiggneId, @PathVariable Integer orderId) {
+        final User copywriter = userService.find(assiggneId);
+        if (copywriter == null) {
+            throw NotFoundException.create("Copywriter", assiggneId);
+        }
         OrderContainer container = orderService.findContainer(orderId);
-        clientService.changeAssignee(container, copywriter);
+        if (container == null) {
+            throw NotFoundException.create("Order container", orderId);
+        }
+        final AuthenticationToken auth = (AuthenticationToken) principal;
+        if (auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
+                container.getClient().getId().equals(auth.getPrincipal().getUser().getId())) {
+            clientService.changeAssignee(container, copywriter);
+        } else {
+            throw new AccessDeniedException("Cannot access order of another client");
+        }
     }
 
-    // TODO opravneny client
     @PutMapping(value = "/visibility/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void changeAssignee(@PathVariable Integer id) {
+    public void changeAssignee(Principal principal, @PathVariable Integer id) {
         OrderContainer container = orderService.findContainer(id);
-        clientService.changeVisibility(container);
+        if (container == null) {
+            throw NotFoundException.create("Order container", id);
+        }
+        final AuthenticationToken auth = (AuthenticationToken) principal;
+        if (auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
+                container.getClient().getId().equals(auth.getPrincipal().getUser().getId())) {
+            clientService.changeVisibility(container);
+        } else {
+            throw new AccessDeniedException("Cannot access order of another client");
+        }
     }
-
-
 }
