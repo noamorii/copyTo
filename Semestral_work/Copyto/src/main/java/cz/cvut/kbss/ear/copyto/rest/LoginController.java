@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.HashMap;
 
 @Controller
-@RequestMapping("/auth")
+@RequestMapping("/login")
 public class LoginController {
     private static final Logger LOG = LoggerFactory.getLogger(LoginController.class);
 
@@ -29,7 +29,7 @@ public class LoginController {
     }
 
 
-    @GetMapping("/login")
+    @GetMapping
     public String viewLoginPage() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
@@ -38,7 +38,7 @@ public class LoginController {
         return "redirect:/";
     }
 
-    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public String loginUser(@RequestBody HashMap<String, String> request) throws Exception {
         loginService.loginUser(request.get("email"), request.get("password"));
         LOG.trace("User {} successfully logged in", request.get("email"));

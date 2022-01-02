@@ -30,12 +30,12 @@ public class AuthenticationSuccess implements AuthenticationSuccessHandler, Logo
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                         Authentication authentication) throws IOException {
-        final String username = getUsername(authentication);
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("Successfully authenticated user {}", username);
-        }
-        final LoginStatus loginStatus = new LoginStatus(true, authentication.isAuthenticated(), username, null);
-        mapper.writeValue(httpServletResponse.getOutputStream(), loginStatus);
+//        final String username = getUsername(authentication);
+//        if (LOG.isTraceEnabled()) {
+//            LOG.trace("Successfully authenticated user {}", username);
+//        }
+//        final LoginStatus loginStatus = new LoginStatus(true, authentication.isAuthenticated(), username, null);
+        //mapper.writeValue(httpServletResponse.getOutputStream(), loginStatus);
     }
 
     private String getUsername(Authentication authentication) {
