@@ -3,7 +3,6 @@ package cz.cvut.kbss.ear.copyto.model;
 import cz.cvut.kbss.ear.copyto.enums.OrderState;
 
 import javax.persistence.*;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

@@ -4,7 +4,6 @@ import cz.cvut.kbss.ear.copyto.rest.util.PasswordMatches;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 @PasswordMatches
 public class UserDTO {
