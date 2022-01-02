@@ -24,12 +24,12 @@ public class WorkplaceDao extends BaseDao<Workplace> {
     }
 
     public List<Version> findWorkplaceVersions(Workplace workplace){
-        return em.createNamedQuery("Workplace.findWorkplaceVersions", Version.class).setParameter("id", workplace)
+        return em.createNamedQuery("Workplace.findWorkplaceVersions", Version.class).setParameter("id", workplace.getId())
                 .getResultList();
     }
 
-    public Workplace findWorkplaceByVersion(Version version){ // TODO zkontrolovat
-        return em.createNamedQuery("Workplace.findWorkplaceByVersion", Workplace.class).setParameter("id", version)
+    public Workplace findWorkplaceByVersion(Version version){
+        return em.createNamedQuery("Workplace.findWorkplaceByVersion", Workplace.class).setParameter("id", version.getId())
                 .getSingleResult();
     }
 

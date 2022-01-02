@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -42,6 +43,17 @@ public class RegisterController {
 
     @PostMapping("/process_register")
     public String processRegister(UserDTO accountDto) {
+        LOG.debug("Registering user account with information: {}", accountDto);
+        try {
+            userService.registerNewUserAccount(accountDto);
+        } catch (UserAlreadyExistException ex) {
+            LOG.error("User already exists: {}", accountDto);
+        }
+        return "login";
+    }
+
+    @PostMapping("/reg")
+    public String registrationForPostman(@RequestBody UserDTO accountDto) {
         LOG.debug("Registering user account with information: {}", accountDto);
         try {
             userService.registerNewUserAccount(accountDto);
