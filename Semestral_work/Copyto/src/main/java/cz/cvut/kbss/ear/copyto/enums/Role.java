@@ -2,8 +2,8 @@ package cz.cvut.kbss.ear.copyto.enums;
 
 public enum Role {
     ADMIN("ROLE_ADMIN"),
-    USER("ROLE_USER"), //TODO odstranit?
-    GUEST("ROLE_GUEST"), //TODO odstranit?
+    USER("ROLE_USER"),
+    GUEST("ROLE_GUEST"),
     CLIENT("ROLE_CLIENT"),
     COPYWRITER("ROLE_COPYWRITER");
 

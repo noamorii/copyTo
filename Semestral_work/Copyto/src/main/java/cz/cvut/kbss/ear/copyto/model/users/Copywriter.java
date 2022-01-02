@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @DiscriminatorValue("COPYWRITER")
-@NamedQueries({ // TODO kontrola
+@NamedQueries({
         @NamedQuery(name = "Copywriter.findAcceptedOrders", query = "SELECT o FROM OrderContainer o WHERE :copywriter = o.assignee" )
 })
 public class Copywriter extends User {

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @DiscriminatorValue("CLIENT")
-@NamedQueries({ // TODO zkontrolovat
+@NamedQueries({
         @NamedQuery(name = "Client.findInterestedCopywriters", query = "SELECT o.candidates FROM OrderContainer o WHERE :client = o.client and :order = o" )
 })
 public class Client extends User {

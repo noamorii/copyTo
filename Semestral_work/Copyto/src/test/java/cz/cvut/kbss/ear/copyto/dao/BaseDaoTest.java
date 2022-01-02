@@ -83,7 +83,6 @@ public class BaseDaoTest {
         assertEquals(cat.getName(), result.getName());
     }
 
-    // TODO - neprochazi
     @Test
     public void removeRemovesSpecifiedInstance() {
         final Category cat = Generator.generateCategory("TestCategory");

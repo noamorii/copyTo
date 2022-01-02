@@ -89,13 +89,4 @@ public class DefaultAuthenticationProviderTest {
     public void supportsUsernameAndPasswordAuthentication() {
         assertTrue(provider.supports(UsernamePasswordAuthenticationToken.class));
     }
-
-    @Test
-    public void successfulLoginErasesPasswordInSecurityContextUser() {
-        final Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), rawPassword);
-        provider.authenticate(auth);
-        assertNotNull(SecurityContextHolder.getContext());
-        final UserDetails details = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
-        assertNull(details.getUser().getPassword());
-    }
 }
