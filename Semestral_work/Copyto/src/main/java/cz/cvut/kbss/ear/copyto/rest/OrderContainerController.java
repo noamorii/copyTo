@@ -2,6 +2,7 @@ package cz.cvut.kbss.ear.copyto.rest;
 
 import cz.cvut.kbss.ear.copyto.enums.Role;
 import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
+import cz.cvut.kbss.ear.copyto.helpers.GetEditor;
 import cz.cvut.kbss.ear.copyto.model.Order;
 import cz.cvut.kbss.ear.copyto.model.OrderContainer;
 import cz.cvut.kbss.ear.copyto.model.users.User;
@@ -49,7 +50,12 @@ public class OrderContainerController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public List<OrderContainer> getAllContainers() {
-        return orderService.findContainers();
+        List<OrderContainer> containers = orderService.findContainers();
+
+        GetEditor editor = new GetEditor();
+        editor.setFakeCategories(containers);
+
+        return containers;
     }
 
     // TODO OPRAVNENY USER

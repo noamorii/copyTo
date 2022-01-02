@@ -18,7 +18,7 @@ public class Client extends User {
     private List<String> webs = new ArrayList<>();
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
-    @JoinColumn(name = "clientId")
+    @JoinColumn(name = "id")
     @OrderBy("id")
     private List<OrderContainer> orders = new ArrayList<>();
 

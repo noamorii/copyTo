@@ -118,8 +118,6 @@ public class CategoryController {
             categoryService.addOrder(category, order);
             LOG.debug("Order {} added into category {}.", order, category);
         } else {
-            System.out.println(container.getClient().getId());
-            System.out.println(auth.getPrincipal().getUser().getId());
             throw new AccessDeniedException("Cannot access order of another client");
         }
     }

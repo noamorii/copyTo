@@ -1,7 +1,9 @@
 package cz.cvut.kbss.ear.copyto.rest;
 
+import cz.cvut.kbss.ear.copyto.dto.OrderDTO;
 import cz.cvut.kbss.ear.copyto.enums.Role;
 import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
+import cz.cvut.kbss.ear.copyto.model.Category;
 import cz.cvut.kbss.ear.copyto.model.Order;
 import cz.cvut.kbss.ear.copyto.model.OrderContainer;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
@@ -19,6 +21,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -49,8 +52,25 @@ public class OrderController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COPYWRITER')")
     @GetMapping
-    List<Order> getAllOrder() {
-        return orderService.findOrders();
+    List<OrderDTO> getAllOrder() {
+        List<Order> orders = orderService.findOrders();
+        if (orders == null) {
+            throw NotFoundException.create("orders", 404);
+        }
+        List<OrderDTO> orderView = new ArrayList<>();
+        for (Order order: orders) {
+            OrderDTO orderDTO = new OrderDTO();
+            for (Category category: order.getCategories()) {
+                orderDTO.addCategory(category.getName());
+            }
+            orderDTO.setDeadline(order.getDeadline());
+            orderDTO.setLink(order.getLink());
+            orderDTO.setInsertionDate(order.getInsertionDate());
+            orderDTO.setPrice(order.getPrice());
+            orderDTO.setId(order.getId());
+            orderView.add(orderDTO);
+        }
+        return orderView;
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COPYWRITER')")
