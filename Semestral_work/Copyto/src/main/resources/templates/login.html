@@ -10,7 +10,7 @@
 <body>
 <div class="container-fluid text-center">
 
-    <form th:action="@{/login}" method="post" style="max-width: 350px; margin: 0 auto;">
+    <form th:action="@{/login}" method="post" style="max-width: 350px; margin: 100px auto;">
 
         <div th:if="${param.error}">
             <p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
@@ -20,8 +20,8 @@
             <p class="text-warning">You have been logged out.</p>
         </div>
 
-        <div class="border border-secondary p-3 rounded">
-            <p>Copyto</p>
+        <div>
+            <p style="font-size: 50px; font-weight: bold; color: green; margin: 50px" >Copyto</p>
             <p>
                 <label>
                     <input type="email" name="email" class="form-control" placeholder="E-mail" required autofocus/>
@@ -34,7 +34,7 @@
             </p>
             <p>
                 <label>
-                    <a href="/copyto/registration">Registration</a>
+                    <a href="/copyto/registration" style="text-decoration: none">Registration</a>
                 </label>&nbsp;
             </p>
             <p>

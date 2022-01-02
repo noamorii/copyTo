@@ -7,6 +7,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script th:src="@{/resources/pwstrength.js}"></script>
 </head>
 <body>
 <div class="container text-center">
@@ -21,7 +23,7 @@
                 <label class="col-4 col-form-label">First name: </label>
                 <div class="col-8">
                     <label>
-                        <input type="text" th:field="*{firstName}" class="form-control" required />
+                        <input id="firstName" type="text" th:field="*{firstName}" class="form-control" required />
                     </label>
                 </div>
             </div>
@@ -30,7 +32,7 @@
                 <label class="col-4 col-form-label">Surname: </label>
                 <div class="col-8">
                     <label>
-                        <input type="text" th:field="*{surname}" class="form-control" required />
+                        <input id="lastName" type="text" th:field="*{surname}" class="form-control" required />
                     </label>
                 </div>
             </div>
@@ -39,9 +41,10 @@
                 <label class="col-4 col-form-label">Password: </label>
                 <div class="col-8">
                     <label>
-                        <input type="password" th:field="*{password}" class="form-control"
+                        <input id="password" type="password" name="password" th:field="*{password}" class="form-control"
                                required minlength="1" maxlength="10"/>
                     </label>
+                    <span id="passwordError" class="alert alert-danger col-sm-4" style="display:none"></span>
                 </div>
             </div>
 
@@ -49,9 +52,11 @@
                 <label class="col-4 col-form-label">Password again: </label>
                 <div class="col-8">
                     <label>
-                        <input type="password" th:field="*{matchingPassword}" class="form-control"
+                        <input id="matchPassword" name="matchingPassword" type="password" th:field="*{matchingPassword}" class="form-control"
                                required minlength="1" maxlength="10"/>
                     </label>
+                    <span id="globalError" class="alert alert-danger col-sm-4" style="display:none;
+                            position: absolute; width: 300px; height: 40px; text-align: center; margin-left: 15px; padding-top: 7px;" ></span>
                 </div>
             </div>
 
@@ -59,7 +64,7 @@
                 <label class="col-4 col-form-label">E-mail: </label>
                 <div class="col-8">
                     <label>
-                        <input type="email" th:field="*{email}" class="form-control" required />
+                        <input id="email" type="email" th:field="*{email}" class="form-control" required />
                     </label>
                 </div>
             </div>
@@ -89,5 +94,23 @@
         </div>
     </form>
 </div>
+
+<script th:inline="javascript">
+    var serverContext = [[@{/}]];
+
+        $(document).ready(function () {
+
+            $(":password").keyup(function(){
+                if($("#password").val() != $("#matchPassword").val()){
+                    $("#globalError").show().html("password doesn't match");
+                }else{
+                    $("#globalError").html("").hide();
+                }
+            });
+
+            $('#password').pwstrength(options);
+        });
+</script>
+
 </body>
 </html>
