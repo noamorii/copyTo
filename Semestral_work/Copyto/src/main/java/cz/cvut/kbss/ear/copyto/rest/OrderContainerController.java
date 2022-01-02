@@ -26,7 +26,7 @@ import java.util.List;
 @RequestMapping("/rest/containers")
 public class OrderContainerController {
 
-    private static final Logger LOG = (Logger) LoggerFactory.getLogger(OrderContainerController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OrderContainerController.class);
 
     private final OrderService orderService;
 

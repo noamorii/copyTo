@@ -1,5 +1,6 @@
 package cz.cvut.kbss.ear.copyto.rest;
 
+import cz.cvut.kbss.ear.copyto.dto.OrderDTO;
 import cz.cvut.kbss.ear.copyto.enums.Role;
 import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
 import cz.cvut.kbss.ear.copyto.model.Category;
@@ -21,6 +22,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -67,10 +69,24 @@ public class CategoryController {
         } return category;
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COPYWRITER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COPYWRITER', 'ROLE_CLIENT')")
     @GetMapping(value = "/id/{id}/orders", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Order> getOrdersByCategory(@PathVariable Integer id) {
-        return orderService.findOrders(getById(id));
+    public List<OrderDTO> getOrdersByCategory(@PathVariable Integer id) {
+        List<Order> orders = orderService.findOrders(getById(id));
+        List<OrderDTO> orderView = new ArrayList<>();
+        for (Order order: orders) {
+            OrderDTO orderDTO = new OrderDTO();
+            for (Category category: order.getCategories()) {
+                orderDTO.addCategory(category.getName());
+            }
+            orderDTO.setDeadline(order.getDeadline());
+            orderDTO.setLink(order.getLink());
+            orderDTO.setInsertionDate(order.getInsertionDate());
+            orderDTO.setPrice(order.getPrice());
+            orderDTO.setId(order.getId());
+            orderView.add(orderDTO);
+        }
+        return orderView;
     }
 
     // --------------------UPDATE--------------------------------------
@@ -93,16 +109,17 @@ public class CategoryController {
         final AuthenticationToken auth = (AuthenticationToken) principal;
         final Category category = getById(categoryId);
         final Order order = orderService.findOrder(orderId);
-        final OrderContainer container = orderService.findContainer(orderId);
+        final OrderContainer container = orderService.findContainer(order);
         if (order == null || container == null) {
             throw NotFoundException.create("order", orderId);
         }
-        if(auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
-                container.getClient().getId().equals(auth.getPrincipal().getUser().getId()))
-        {
+        if (auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
+                container.getClient().getId().equals(auth.getPrincipal().getUser().getId())) {
             categoryService.addOrder(category, order);
             LOG.debug("Order {} added into category {}.", order, category);
         } else {
+            System.out.println(container.getClient().getId());
+            System.out.println(auth.getPrincipal().getUser().getId());
             throw new AccessDeniedException("Cannot access order of another client");
         }
     }

@@ -2,10 +2,12 @@ package cz.cvut.kbss.ear.copyto.rest;
 
 import cz.cvut.kbss.ear.copyto.dto.UserDTO;
 import cz.cvut.kbss.ear.copyto.exception.UserAlreadyExistException;
+import cz.cvut.kbss.ear.copyto.rest.util.GenericResponse;
 import cz.cvut.kbss.ear.copyto.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,12 +33,12 @@ public class RegisterController {
         return "registration";
     }
 
-//    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-//    public GenericResponse registerUserAccount(UserDTO accountDto) {
-//        LOG.debug("Registering user account with information: {}", accountDto);
-//        userService.registerNewUserAccount(accountDto);
-//        return new GenericResponse("success");
-//    }
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public GenericResponse registerUserAccount(UserDTO accountDto) {
+        LOG.debug("Registering user account with information: {}", accountDto);
+        userService.registerNewUserAccount(accountDto);
+        return new GenericResponse("success");
+    }
 
     @PostMapping("/process_register")
     public String processRegister(UserDTO accountDto) {

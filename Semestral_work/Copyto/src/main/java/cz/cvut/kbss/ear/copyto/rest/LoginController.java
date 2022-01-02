@@ -38,7 +38,8 @@ public class LoginController {
         return "redirect:/";
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+
+    @PostMapping(value = "/log", produces = MediaType.APPLICATION_JSON_VALUE)
     public String loginUser(@RequestBody HashMap<String, String> request) throws Exception {
         loginService.loginUser(request.get("email"), request.get("password"));
         LOG.trace("User {} successfully logged in", request.get("email"));
