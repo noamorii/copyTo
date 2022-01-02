@@ -2,6 +2,7 @@ package cz.cvut.kbss.ear.copyto.rest;
 
 import cz.cvut.kbss.ear.copyto.enums.OrderState;
 import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
+import cz.cvut.kbss.ear.copyto.model.Order;
 import cz.cvut.kbss.ear.copyto.model.OrderContainer;
 import cz.cvut.kbss.ear.copyto.model.users.User;
 import cz.cvut.kbss.ear.copyto.security.model.AuthenticationToken;
@@ -52,10 +53,12 @@ public class CopywriterController {
         }
     }
 
+    // TODO opravit
     @PutMapping(value = "/user/{userId}/order/{orderId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void signUpForOrder(Principal principal, @PathVariable Integer orderId, @PathVariable Integer userId) {
-        OrderContainer container = orderService.findContainer(orderId);
+        Order order = orderService.findOrder(orderId);
+        OrderContainer container = orderService.findContainer(order);
         if (container == null) {
             throw NotFoundException.create("container", orderId);
         }
