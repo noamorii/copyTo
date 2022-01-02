@@ -24,10 +24,10 @@ public class OrderContainer extends AbstractEntity{
     @OneToOne(cascade = CascadeType.MERGE)
     private User client;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-    private Order order;
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private Order order = new Order();
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private Workplace workplace = new Workplace();
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true) // TODO ZKONTROLOVAT, ZE TOHLE DB NEPROMAZE

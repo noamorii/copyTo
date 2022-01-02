@@ -70,6 +70,7 @@ public class OrderController {
 
     // --------------------UPDATE--------------------------------------
 
+    // Duplicita s nize uvedenym
     @PutMapping(value = "/id/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(Principal principal, @PathVariable Integer id, @RequestBody Order order) {
@@ -88,6 +89,33 @@ public class OrderController {
             orderService.update(original);
         }
     }
+
+    @PutMapping(value = "id-container/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void setOrder(Principal principal, @PathVariable Integer id, @RequestBody Order order){
+        final OrderContainer container = orderService.findContainer(id);
+        Order original = container.getOrder();
+
+        original.setPrice(order.getPrice());
+        original.setLink(order.getLink());
+        original.setDeadline(order.getDeadline());
+        original.setCategories(order.getCategories());
+        original.setState(order.getState());
+
+
+        final AuthenticationToken auth = (AuthenticationToken) principal;
+        if(auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
+                auth.getPrincipal().getUser().getId().equals(container.getClient().getId())){
+            orderService.update(original);
+            LOG.debug("Order {} was setted.", original);
+        }
+
+
+
+    }
+
+
+    // --------------------UPDATE--------------------------------------
 
     @DeleteMapping(value = "/id/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
