@@ -36,9 +36,10 @@ public class OrderContainerController {
         this.orderService = workplaceService;
     }
 
-    @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @PreAuthorize("hasAnyRole('ROLE_CLIENT', 'ROLE_ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createOrderContainer(@RequestBody OrderContainer container) {
+    public ResponseEntity<Void> createOrderContainer(Principal principal, @RequestBody OrderContainer container) {
+        container.setClient(((AuthenticationToken) principal).getPrincipal().getUser());
         orderService.createContainer(container);
         LOG.debug("create container {}.", container);
         final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/id/{id}", container.getId());

@@ -79,7 +79,7 @@ public class ClientController {
 
     @PutMapping(value = "/visibility/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void changeAssignee(Principal principal, @PathVariable Integer id) {
+    public void changeVisibility(Principal principal, @PathVariable Integer id) {
         OrderContainer container = orderService.findContainer(id);
         if (container == null) {
             throw NotFoundException.create("Order container", id);

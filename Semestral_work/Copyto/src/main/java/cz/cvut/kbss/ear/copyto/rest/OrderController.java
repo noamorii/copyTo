@@ -122,16 +122,12 @@ public class OrderController {
         original.setCategories(order.getCategories());
         original.setState(order.getState());
 
-
         final AuthenticationToken auth = (AuthenticationToken) principal;
         if(auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
                 auth.getPrincipal().getUser().getId().equals(container.getClient().getId())){
             orderService.update(original);
             LOG.debug("Order {} was setted.", original);
         }
-
-
-
     }
 
 
