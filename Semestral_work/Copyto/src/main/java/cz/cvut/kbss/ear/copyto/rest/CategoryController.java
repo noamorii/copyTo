@@ -3,6 +3,7 @@ package cz.cvut.kbss.ear.copyto.rest;
 import cz.cvut.kbss.ear.copyto.dto.OrderDTO;
 import cz.cvut.kbss.ear.copyto.enums.Role;
 import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
+import cz.cvut.kbss.ear.copyto.helpers.GetEditor;
 import cz.cvut.kbss.ear.copyto.model.Category;
 import cz.cvut.kbss.ear.copyto.model.Order;
 import cz.cvut.kbss.ear.copyto.model.OrderContainer;
@@ -57,16 +58,31 @@ public class CategoryController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_CLIENT', 'ROLE_COPYWRITER')")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Category> getCategories() {
-        return categoryService.findCategories();
+        List<Category> categories = categoryService.findCategories();
+
+        if (categories == null) {
+            throw NotFoundException.create("Categories", "all");
+        }
+
+        final GetEditor editor = new GetEditor();
+        editor.setFakeOrders(categories);
+
+        return categories;
     }
 
 
     @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Category getById(@PathVariable Integer id) {
         final Category category = categoryService.findCategory(id);
+
         if (category == null) {
             throw NotFoundException.create("Category", id);
-        } return category;
+        }
+
+        final GetEditor editor = new GetEditor();
+        editor.setFakeOrders(category);
+
+        return category;
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COPYWRITER', 'ROLE_CLIENT')")
