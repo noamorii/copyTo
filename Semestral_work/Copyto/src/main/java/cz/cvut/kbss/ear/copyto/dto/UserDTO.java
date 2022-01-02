@@ -1,9 +1,11 @@
 package cz.cvut.kbss.ear.copyto.dto;
 
 import cz.cvut.kbss.ear.copyto.rest.util.PasswordMatches;
+import cz.cvut.kbss.ear.copyto.rest.util.ValidEmail;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @PasswordMatches
 public class UserDTO {
@@ -18,11 +20,15 @@ public class UserDTO {
 
     @NotNull
     @NotEmpty
+    private Date date;
+
+    @NotNull
+    @NotEmpty
     private String password;
     private String matchingPassword;
 
     @NotNull
- //   @ValidEmail
+    @ValidEmail
     @NotEmpty
     private String email;
 
@@ -88,5 +94,13 @@ public class UserDTO {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

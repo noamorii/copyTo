@@ -2,6 +2,7 @@ package cz.cvut.kbss.ear.copyto.rest;
 
 import cz.cvut.kbss.ear.copyto.enums.Role;
 import cz.cvut.kbss.ear.copyto.exception.NotFoundException;
+import cz.cvut.kbss.ear.copyto.helpers.GetEditor;
 import cz.cvut.kbss.ear.copyto.model.Conversation;
 import cz.cvut.kbss.ear.copyto.model.users.User;
 import cz.cvut.kbss.ear.copyto.rest.util.RestUtils;
@@ -23,7 +24,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rest/Conversations")
+@RequestMapping("/rest/conversations")
 public class ConversationController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConversationController.class);
@@ -79,6 +80,8 @@ public class ConversationController {
         final AuthenticationToken auth = (AuthenticationToken) principal;
         if (auth.getPrincipal().getUser().getRole() == Role.ADMIN ||
                 auth.getPrincipal().getUser().getId().equals(user.getId())) {
+            GetEditor editor = new GetEditor();
+            editor.setFakeConversation(conversations);
             return conversations;
         } else {
             throw new AccessDeniedException("Cannot access contracts of another user");

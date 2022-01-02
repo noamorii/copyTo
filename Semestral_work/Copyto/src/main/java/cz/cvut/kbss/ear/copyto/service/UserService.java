@@ -74,6 +74,7 @@ public class UserService {
         user.setSurname(accountDto.getSurname());
         user.setPassword(accountDto.getPassword());
         user.setEmail(accountDto.getEmail());
+        user.setDateOfBirth(accountDto.getDate());
         user.setMobile(accountDto.getMobile());
         user.setDateOfBirth(new Date());
         if (Objects.equals(accountDto.getRole(), "client")) {

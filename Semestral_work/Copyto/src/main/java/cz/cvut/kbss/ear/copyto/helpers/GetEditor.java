@@ -1,8 +1,7 @@
 package cz.cvut.kbss.ear.copyto.helpers;
 
-import cz.cvut.kbss.ear.copyto.model.Category;
-import cz.cvut.kbss.ear.copyto.model.Order;
-import cz.cvut.kbss.ear.copyto.model.OrderContainer;
+import cz.cvut.kbss.ear.copyto.model.*;
+import cz.cvut.kbss.ear.copyto.model.users.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +69,38 @@ public class GetEditor {
             category.setOrders(fakeOrders);
         }
         return categories;
+    }
+
+    public List<Conversation> setFakeConversation(List<Conversation> conversations){
+        List<Conversation> fakeConversations = new ArrayList<>();
+        for(Conversation conversation : conversations){
+            Conversation fakeConversation = new Conversation();
+            List<User> hiddenUsers = new ArrayList<>();
+            for (User user : conversation.getUsers()){
+                User hiddenUser = new User();
+                hiddenUser.setFirstName(user.getFirstName());
+                hiddenUser.setSurname(user.getSurname());
+                hiddenUser.setId(user.getId());
+                hiddenUser.setRole(user.getRole());
+                hiddenUsers.add(hiddenUser);
+            }
+            conversation.setMembers(hiddenUsers);
+            for(Message message : conversation.getMessages()){
+                User receiver = new User();
+                receiver.setFirstName(message.getReceiver().getFirstName());
+                receiver.setSurname(message.getReceiver().getSurname());
+                receiver.setId(message.getReceiver().getId());
+                receiver.setRole(message.getReceiver().getRole());
+                message.setReceiver(receiver);
+                User author = new User();
+                author.setFirstName(message.getAuthor().getFirstName());
+                author.setRole(message.getAuthor().getRole());
+                author.setSurname(message.getAuthor().getSurname());
+                author.setId(message.getAuthor().getId());
+                message.setAuthor(author);
+            }
+        }
+        return fakeConversations;
     }
 
 }
