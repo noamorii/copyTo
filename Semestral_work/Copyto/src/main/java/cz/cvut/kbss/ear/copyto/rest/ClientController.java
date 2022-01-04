@@ -35,7 +35,7 @@ public class ClientController {
         this.orderService = orderService;
     }
 
-    @PutMapping(value = "/id-assignee/{assiggneId}/id-container/{orderId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/id-assignee/{assiggneId}/id-container/{orderId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void authorizeAssignee(Principal principal, @PathVariable Integer assiggneId, @PathVariable Integer orderId) {
         User copywriter = userService.find(assiggneId);
@@ -56,7 +56,7 @@ public class ClientController {
         }
     }
 
-    @PutMapping(value = "/change/id-assignee/{assiggneId}/id-container/{orderId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/change/id-assignee/{assiggneId}/id-container/{orderId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void changeAssignee(Principal principal, @PathVariable Integer assiggneId, @PathVariable Integer orderId) {
         final User copywriter = userService.find(assiggneId);
@@ -77,7 +77,7 @@ public class ClientController {
         }
     }
 
-    @PutMapping(value = "/visibility/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/visibility/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void changeVisibility(Principal principal, @PathVariable Integer id) {
         OrderContainer container = orderService.findContainer(id);
