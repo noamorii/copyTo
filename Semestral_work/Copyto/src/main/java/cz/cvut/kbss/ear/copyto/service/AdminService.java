@@ -23,7 +23,6 @@ public class AdminService extends UserService {
         this.categoryDao = categoryDao;
     }
 
-    // TODO admin
     @Transactional
     public void deleteCategory(Integer id) {
         Category category = categoryDao.find(id);
@@ -31,14 +30,12 @@ public class AdminService extends UserService {
         categoryDao.remove(category);
     }
 
-    // TODO Admin
     @Transactional
     public void createCategory(Category category){
         Objects.requireNonNull(category);
         categoryDao.persist(category);
     }
 
-    //TODO Admin
     @Transactional
     public void deleteUser(Integer id) {
         User toRemove = dao.find(id);

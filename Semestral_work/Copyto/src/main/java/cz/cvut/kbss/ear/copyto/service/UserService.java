@@ -52,7 +52,6 @@ public class UserService {
         return dao.findByName(firstname, surname);
     }
 
-    //todo
     @Transactional
     public void createAccount(User user) {
         user.encodePassword(passwordEncoder);

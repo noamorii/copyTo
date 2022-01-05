@@ -79,7 +79,6 @@ public class MessageService {
         messageDao.persist(message);
     }
 
-    // TODO zkontrolovat
     @Transactional
     public void sendMessage(Message message) {
         messageDao.persist(message);
@@ -107,7 +106,6 @@ public class MessageService {
         }
     }
 
-    // TODO otestovat
     @Transactional
     public void sendGroupMessage(User author, List<User> receivers, String text) {
         for (User receiver : receivers) {

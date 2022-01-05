@@ -32,7 +32,6 @@ public class User extends AbstractEntity {
     @Column(nullable = false)
     private String surname;
 
-    // TODO password like a string?
     @Basic(optional = false)
     @Column(nullable = false)
     private String password;

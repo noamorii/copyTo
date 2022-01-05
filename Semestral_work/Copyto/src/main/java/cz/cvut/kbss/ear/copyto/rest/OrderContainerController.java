@@ -59,7 +59,6 @@ public class OrderContainerController {
         return containers;
     }
 
-    // TODO OPRAVNENY USER
     @GetMapping(value = "/id/{id}/candidates", produces = MediaType.APPLICATION_JSON_VALUE)
     List<User> getCandidates(@PathVariable Integer id) {
         OrderContainer container = orderService.findContainer(id);

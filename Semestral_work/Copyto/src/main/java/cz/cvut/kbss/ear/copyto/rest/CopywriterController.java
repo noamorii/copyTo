@@ -53,7 +53,6 @@ public class CopywriterController {
         }
     }
 
-    // TODO opravit
     @PutMapping(value = "/user/{userId}/order/{orderId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void signUpForOrder(Principal principal, @PathVariable Integer orderId, @PathVariable Integer userId) {

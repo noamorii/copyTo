@@ -59,8 +59,6 @@ public class Contract extends AbstractEntity {
     @Column(nullable = false)
     private boolean paid = false;
 
-    // TODO confirm by them
-
     public Contract(User client, User copywriter, Order order, Date date, double price) {
         this.client = client;
         this.copywriter = copywriter;

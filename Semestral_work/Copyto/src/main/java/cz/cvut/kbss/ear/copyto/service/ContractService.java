@@ -54,8 +54,6 @@ public class ContractService {
         contractDao.persist(contract);
     }
 
-    // TODO
-
     @Transactional
     public void negotiateAgreement(User client, User copywriter, Order order, Date date, double price){
         Contract contract = new Contract(client, copywriter, order, date, price);
