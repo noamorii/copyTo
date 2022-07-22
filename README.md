@@ -24,7 +24,7 @@ Detailed functions of each role are included in the [documentation](https://gith
 
 ## Implementation 
 
-``Backend`` : Java, Spring-Boot, Spring Security, REST API, Hibernate, Thymeleaf, Maven.
+``Backend`` : Java, Spring-Boot, Spring Security, REST API, Spring Data JPA, Hibernate, Thymeleaf, Maven.
 
 ``Application Servicer``: Apache Tomcat Server.
 
