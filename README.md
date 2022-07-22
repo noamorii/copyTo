@@ -22,5 +22,14 @@ Detailed functions of each role are included in the [documentation](https://gith
 
 [UML](https://github.com/noamorii/copyTo/blob/master/Semestral_work/ClassDiagram/Class%20DiagramS.jpg) of the implemented main system with the omission of some entities <-
 
+## Implementation 
+
+``Backend`` : Java, Spring-Boot, Spring Security, REST API, Hibernate, Thymeleaf, Maven.
+
+``Application Servicer``: Apache Tomcat Server.
+
+``Database`` : PostgreSQL
+
+
 
 
